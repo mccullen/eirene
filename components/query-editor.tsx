@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
 
 import { Editor } from '@monaco-editor/react';
