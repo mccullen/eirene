@@ -1,4 +1,5 @@
 import QueryEditor from '@/components/query-editor';
+
 export default function Tutorial() {
     return (
     <>
