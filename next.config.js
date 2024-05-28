@@ -1,4 +1,4 @@
-let basePath = "/eirene";
+let basePath = "";
 if (process.env.NEXT_PUBLIC_NODE_ENV === "vercel" || process.env.ENV === "dev") {
   // Running from vercel or local machine
   basePath = ""
