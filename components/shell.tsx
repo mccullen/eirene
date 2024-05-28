@@ -42,7 +42,7 @@ export default function Shell({ children }: any) {
           const buffer = await response.arrayBuffer();
           const zip = await JSZip.loadAsync(buffer);
           const file = zip.file("GiBleed_5.3_db.sqlite");
-          const sqliteBuffer = await file?.async("arraybuffer");
+          const sqliteBuffer: ArrayBuffer = await file?.async("arraybuffer") as ArrayBuffer;
 
           if (sqliteBuffer) {
             let tmp = new SQL.Database(new Uint8Array(sqliteBuffer));
@@ -66,7 +66,7 @@ export default function Shell({ children }: any) {
           const file = zip.file("cdm.sqlite");
           const sqliteBuffer = await file?.async("arraybuffer");
 
-          let tmp = new SQL.Database(new Uint8Array(sqliteBuffer));
+          let tmp = new SQL.Database(new Uint8Array(sqliteBuffer as ArrayBuffer));
           let r = tmp.exec("select * from person;");
           setDb(tmp);
         }
