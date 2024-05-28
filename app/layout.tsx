@@ -1,7 +1,13 @@
-"use client"
 import Shell from '@/components/shell';
 import '../styles/globals.css'
-console.log("Here");
+console.log("layout.tsx log");
+
+import { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: "Eirene",
+  metadataBase: new URL("https://mccullen.gitlab.io/eirene")
+}
 
 export default function RootLayout({
     // Layouts must accept a children prop.

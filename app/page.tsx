@@ -1,9 +1,3 @@
-import { Metadata } from 'next'
- 
-export const metadata: Metadata = {
-  title: "Eirene"
-}
-
 export default function Home({db, test}: any) {
   return (
     <>
