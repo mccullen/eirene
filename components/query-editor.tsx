@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
 
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './shell';
-import Link from 'next/link';
 import ResultTable from './result-table';
 
 function getHighlightedText(editor) {

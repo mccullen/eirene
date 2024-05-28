@@ -60,7 +60,6 @@ export default function Shell({ children }: any) {
           });
           console.log("init3");
           const response = await fetch("https://raw.githubusercontent.com/OHDSI/EunomiaDatasets/main/datasets/GiBleed/GiBleed_5.3.zip");
-          debugger;
           const buffer = await response.arrayBuffer();
           const zip = await JSZip.loadAsync(buffer);
           const file = zip.file("cdm.sqlite");
