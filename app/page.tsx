@@ -1,4 +1,3 @@
-"use client"
 export default function Home({db, test}: any) {
   return (
     <>
