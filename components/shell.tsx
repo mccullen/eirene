@@ -68,12 +68,12 @@ export default function Shell({ children }: any) {
                 <div className="flex space-x-4 items-center">
                   {/* logo */}
                   <div className="font-bold">
-                    <Link href="/home" className="py-5 px-3 text-gray-700">Eirene</Link>
+                    <Link href="/" className="py-5 px-3 text-gray-700">Eirene</Link>
                   </div>
 
                   {/* promary nav */}
                   <div className="hidden md:flex items-center space-x-1">
-                    <Link href="/home" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Home</Link>
+                    <Link href="/" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Home</Link>
                     <Link href="/playground" className="py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300">Playground</Link>
                     {/*<Link href="/tutorial" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Tutorial</Link>*/}
                   </div>
@@ -95,7 +95,7 @@ export default function Shell({ children }: any) {
 
             {/* mobile menu */}
             <div ref={mobileMenu} className="mobile-menu hidden">
-              <Link href="/home" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
+              <Link href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
               <Link href="/playground" className="block py-2 px-4 text-sm hover:bg-gray-200">Playground</Link>
               <Link href="tutorial" className="block py-2 px-4 text-sm hover:bg-gray-200">Tutorial</Link>
             </div>

@@ -26,6 +26,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      /*
         {
             source: '/eirene.txt',
             destination: '/eirene',
@@ -38,9 +39,10 @@ const nextConfig = {
             basePath: false,
             permanent: true
         }
+        */
     ]
   },
-  assetPrefix: "https://mccullen.gitlab.io/eirene/",
+  //assetPrefix: "https://mccullen.gitlab.io/eirene/",
   basePath
 }
 
