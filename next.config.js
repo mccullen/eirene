@@ -30,13 +30,13 @@ const nextConfig = {
             source: '/eirene.txt',
             destination: '/index.txt',
             basePath: false,
-            permanent: false
+            permanent: true
         },
         {
             source: '/',
             destination: '/eirene',
             basePath: false,
-            permanent: false
+            permanent: true
         }
     ]
   },
