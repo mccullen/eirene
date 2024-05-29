@@ -45,29 +45,14 @@ export default function Shell({ children }: any) {
           const sqliteBuffer: ArrayBuffer = await file?.async("arraybuffer") as ArrayBuffer;
 
           if (sqliteBuffer) {
-            let tmp = new SQL.Database(new Uint8Array(sqliteBuffer));
-            let r = tmp.exec("select * from person;");
-            setDb(tmp);
+            try {
+              let tmp = new SQL.Database(new Uint8Array(sqliteBuffer));
+              setDb(tmp);
+            } catch (error) {
+              console.error(error);
+            }
+            //let r = tmp.exec("select * from person;");
           }
-        }
-        async function init3() {
-          const SQL = await initSqlJs({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => {
-                return file;
-              }
-          });
-          console.log("init3");
-          const response = await fetch("https://raw.githubusercontent.com/OHDSI/EunomiaDatasets/main/datasets/GiBleed/GiBleed_5.3.zip");
-          const buffer = await response.arrayBuffer();
-          const zip = await JSZip.loadAsync(buffer);
-          const file = zip.file("cdm.sqlite");
-          const sqliteBuffer = await file?.async("arraybuffer");
-
-          let tmp = new SQL.Database(new Uint8Array(sqliteBuffer as ArrayBuffer));
-          let r = tmp.exec("select * from person;");
-          setDb(tmp);
         }
         init2();
       }, []);
