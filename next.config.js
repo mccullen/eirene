@@ -40,7 +40,7 @@ const nextConfig = {
         }
     ]
   },
-  assetPrefix: "https://mccullen.gitlab.io/eirene/"
+  assetPrefix: "https://mccullen.gitlab.io/eirene/",
   basePath
 }
 
