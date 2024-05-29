@@ -27,7 +27,7 @@ const nextConfig = {
   async redirects() {
     return [
         {
-            source: '/eumonia.txt',
+            source: '/eirene.txt',
             destination: '/index.txt',
             basePath: false,
             permanent: false
