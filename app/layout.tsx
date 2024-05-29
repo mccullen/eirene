@@ -6,7 +6,7 @@ import { Metadata } from 'next'
  
 export const metadata: Metadata = {
   title: "Eirene",
-  metadataBase: new URL("https://mccullen.gitlab.io/eirene")
+  //metadataBase: new URL("https://mccullen.gitlab.io/eirene")
 }
 
 export default function RootLayout({
