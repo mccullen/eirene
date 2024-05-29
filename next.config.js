@@ -14,19 +14,15 @@ const nextConfig = {
   },
   output: 'export',
   webpack: (config, { isServer }) => {
-    if (!isServer) {
-            config.resolve = {
-                ...config.resolve,
-                fallback: {
-                    fs: false,
-                },
-            };
-        }
-        return config;// Fixes npm packages that depend on `fs` module
-  },
-  assetPrefix: "https://mccullen.gitlab.io/eirene/",
-  images: {
-    unoptimized: true,
+    //if (!isServer) {
+      config.resolve = {
+        ...config.resolve,
+        fallback: {
+          fs: false,
+        },
+      };
+    //}
+    return config;// Fixes npm packages that depend on `fs` module
   },
   basePath
 }
