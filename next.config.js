@@ -1,4 +1,4 @@
-let basePath = "/abcdefghijklmnopqrstuvwxyz";
+let basePath = "/eirene";
 if (process.env.NEXT_PUBLIC_NODE_ENV === "vercel" || process.env.ENV === "dev") {
   // Running from vercel or local machine
   basePath = ""
@@ -23,6 +23,16 @@ const nextConfig = {
       };
     //}
     return config;// Fixes npm packages that depend on `fs` module
+  },
+  async redirects() {
+    return [
+        {
+            source: '/eumonia.txt',
+            destination: '/index.txt',
+            basePath: false,
+            permanent: false
+        }
+    ]
   },
   basePath
 }
