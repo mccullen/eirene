@@ -14,12 +14,13 @@ export default function ResultTable({ columns, data, className}) {
 
   return (
       <>
-      <table>
+      {/* border-separate needed so border moves with sticky headers: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element */}
+      <table className="border-separate">
       <thead>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <th key={header.id} className="border border-black p-2">
+              <th key={header.id} className="border border-black p-2 sticky bg-white top-0">
                 {header.isPlaceholder
                   ? null
                   : flexRender(

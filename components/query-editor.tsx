@@ -98,7 +98,7 @@ const onResize = (event, { size }) => {
 
     return (
         <div>
-          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={onExecute}>Execute</button>
+          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 rounded' onClick={onExecute}>Execute</button>
           <div className="border border-gray relative min-h-[30vh]">
             <div className="absolute inset-0 w-full h-full bg-lightblue">
               <Editor 
