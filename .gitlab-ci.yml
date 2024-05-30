@@ -1,7 +1,7 @@
 image: node
 
 before_script:
-  - npm install
+  - npm install --force # Live dangerously
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
