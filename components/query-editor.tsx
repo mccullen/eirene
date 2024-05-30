@@ -4,6 +4,9 @@ import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './shell';
 import ResultTable from './result-table';
+import { ResizableBox } from 'react-resizable';
+import SplitPane from "react-split-pane";
+import { Pane } from "react-split-pane";
 
 function getHighlightedText(editor) {
     // Get the text model
@@ -26,6 +29,8 @@ export default function QueryEditor(props) {
     ]);
     let [data, setData] = useState<any[]>([
     ]);
+    const [editorHeight, setEditorHeight] = useState(300); // Initial height for the editor
+
 
     function onChange(value, event) {
         console.log("changed");
@@ -86,25 +91,36 @@ export default function QueryEditor(props) {
             </div>
       );
     }
-    return (
-        <>
-          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={onExecute}>Execute</button>
-          <div className="border border-gray">
-            <Editor 
-              height="100px"
-              width="100%"
-              theme="light"
-              defaultLanguage='sql'
-              defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 10;"}
-              onChange={onChange}
-              onMount={onMount}
-              beforeMount={beforeMount}
-            />
-            {solution}
-          </div>
 
+const onResize = (event, { size }) => {
+    setEditorHeight(size.height);
+  };
+
+    return (
+        <div>
+          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={onExecute}>Execute</button>
+          <div className="border border-gray relative min-h-[30vh]">
+            <div className="absolute inset-0 w-full h-full bg-lightblue">
+              <Editor 
+                height="100%"
+                width="100%"
+                theme="light"
+                defaultLanguage='sql'
+                defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
+                onChange={onChange}
+                onMount={onMount}
+                beforeMount={beforeMount}
+              />
+            {solution}
+            </div>
+          </div>
         <span className="text-red-500">{errorMsg}</span>
+
+        <div className="border-t border-gray-300 my-4"></div>
+
+        <div className="overflow-x-auto max-h-[50vh]">
         <ResultTable className="result-tbl" columns={columns} data={data} />
-      </>
+        </div>
+      </div>
     );
 }
