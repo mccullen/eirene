@@ -64,3 +64,5 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - To deploy on gitlab
   - Check the .gitlab-ci.yml file
   - Essentially, we added 'export' to our next.config.js so that our static output would be generated and copied to the public directory
+- 
+

@@ -1,5 +1,6 @@
 import Shell from '@/components/shell';
 import '../styles/globals.css'
+import { GoogleAnalytics } from '@next/third-parties/google'
 console.log("layout.tsx log");
 
 import { Metadata } from 'next'
@@ -23,6 +24,7 @@ export default function RootLayout({
                 {children}
             </Shell>
         </body>
+        <GoogleAnalytics gaId="G-W3GEZ55QRH" />
       </html>
     )
   }
