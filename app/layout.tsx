@@ -1,6 +1,6 @@
 import Shell from '@/components/shell';
 import '../styles/globals.css'
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 console.log("layout.tsx log");
 
 import { Metadata } from 'next'
@@ -24,7 +24,8 @@ export default function RootLayout({
                 {children}
             </Shell>
         </body>
-        <GoogleAnalytics gaId="G-W3GEZ55QRH" />
+        {/*<GoogleAnalytics gaId="G-W3GEZ55QRH" />*/}
+        <GoogleTagManager gtmId="GTM-WRZN7BHT" />
       </html>
     )
   }
