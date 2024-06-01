@@ -25,7 +25,6 @@ export default function RootLayout({
             </Shell>
         </body>
         {/*<GoogleAnalytics gaId="G-W3GEZ55QRH" />*/}
-        <GoogleAnalytics gaId="G-W3GEZ55QRH" />
         <GoogleTagManager gtmId="GTM-WRZN7BHT" />
       </html>
     )
