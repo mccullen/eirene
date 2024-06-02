@@ -71,10 +71,10 @@ export default function Shell({ children }: any) {
                     <Link href="/" className="py-5 px-3 text-gray-700">Eirene</Link>
                   </div>
 
-                  {/* promary nav */}
+                  {/* primary nav */}
                   <div className="hidden md:flex items-center space-x-1">
-                    <Link href="/" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Home</Link>
-                    <Link href="/playground" className="py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300">Playground</Link>
+                    <Link id="home-desktop-link" href="/" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Home</Link>
+                    <Link id="playground-desktop-link" href="/playground" className="py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300">Playground</Link>
                     {/*<Link href="/tutorial" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Tutorial</Link>*/}
                   </div>
                 </div>
@@ -95,8 +95,8 @@ export default function Shell({ children }: any) {
 
             {/* mobile menu */}
             <div ref={mobileMenu} className="mobile-menu hidden">
-              <Link href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
-              <Link href="/playground" className="block py-2 px-4 text-sm hover:bg-gray-200">Playground</Link>
+              <Link id="home-mobile-link" href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
+              <Link id="playground-mobile-link" href="/playground" className="block py-2 px-4 text-sm hover:bg-gray-200">Playground</Link>
               <Link href="tutorial" className="block py-2 px-4 text-sm hover:bg-gray-200">Tutorial</Link>
             </div>
           </nav>

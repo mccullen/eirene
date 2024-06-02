@@ -84,7 +84,7 @@ export default function QueryEditor(props) {
     if (props.solution) {
       solution = (
             <div>
-              <button className=" text-blue-500 px-2" onClick={event => {
+              <button id="exe-btn" className=" text-blue-500 px-2" onClick={event => {
                 editorRef.current.getModel().setValue(props.solution);
                 onExecute(event);
               }}>Show solution</button>
