@@ -17,15 +17,16 @@ export default function RootLayout({
   }: {
     children: React.ReactNode
   }) {
-    return (
-      <html lang="en">
-        <body>
-            <Shell>
-                {children}
-            </Shell>
-        </body>
-        {/*<GoogleAnalytics gaId="G-W3GEZ55QRH" />*/}
+
+  return (
+    <html lang="en">
+      <body>
         <GoogleTagManager gtmId="GTM-WRZN7BHT" />
-      </html>
-    )
-  }
+        <Shell>
+          {children}
+        </Shell>
+      </body>
+      {/*<GoogleAnalytics gaId="G-W3GEZ55QRH" />*/}
+    </html>
+  )
+}
