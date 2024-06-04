@@ -7,6 +7,7 @@ import ResultTable from './result-table';
 import { ResizableBox } from 'react-resizable';
 import SplitPane from "react-split-pane";
 import { Pane } from "react-split-pane";
+import { sendGTMEvent } from '@next/third-parties/google'
 
 function getHighlightedText(editor) {
     // Get the text model
@@ -51,6 +52,8 @@ export default function QueryEditor(props) {
 
       function onExecute(event) {
         console.log(editorRef.current);
+        console.log("sending event");
+        sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
         const highlightedText = getHighlightedText(editorRef.current);
         const query = editorRef.current.getValue();
         /*
