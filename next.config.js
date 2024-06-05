@@ -24,9 +24,9 @@ const nextConfig = {
     //}
     return config;// Fixes npm packages that depend on `fs` module
   },
+      /*
   async redirects() {
     return [
-      /*
         {
             source: '/eirene.txt',
             destination: '/eirene',
@@ -39,9 +39,10 @@ const nextConfig = {
             basePath: false,
             permanent: true
         }
-        */
     ]
   },
+        */
+  /*
   async rewrites() {
     return [
       {
@@ -54,7 +55,8 @@ const nextConfig = {
       }
     ]
   },
-  //assetPrefix: "https://mccullen.gitlab.io/eirene/",
+  */
+  assetPrefix: "https://mccullen.gitlab.io/eirene/",
   basePath
 }
 
