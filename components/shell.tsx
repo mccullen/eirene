@@ -14,13 +14,14 @@ export default function Shell({ children }: any) {
 
     // Put the DB into a global context so it persists across pages in the layout
     useEffect(() => {
+      /*
         async function init() {
           console.log("init");
           const SQL = await initSqlJs({
             // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
             // You can omit locateFile completely when running in node
             locateFile: file => {
-                return file;
+                return `eirene/${file}`;
               }
           });
           const response = await fetch("cdm.sqlite");
@@ -29,12 +30,14 @@ export default function Shell({ children }: any) {
           let r = tmp.exec("select * from person;");
           setDb(tmp);
         }
+        */
         async function init2() {
           const SQL = await initSqlJs({
             // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
             // You can omit locateFile completely when running in node
             locateFile: file => {
                 return file;
+                //return `eirene/${file}`;
               }
           });
           console.log("init2");
