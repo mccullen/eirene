@@ -24,7 +24,6 @@ const nextConfig = {
     //}
     return config;// Fixes npm packages that depend on `fs` module
   },
-      /*
   async redirects() {
     return [
         {
@@ -35,13 +34,12 @@ const nextConfig = {
         },
         {
             source: '/',
-            destination: '/eirene',
-            basePath: false,
+            destination: '/test',
+            basePath: true,
             permanent: true
         }
     ]
   },
-        */
   /*
   async rewrites() {
     return [
