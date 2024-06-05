@@ -24,39 +24,7 @@ const nextConfig = {
     //}
     return config;// Fixes npm packages that depend on `fs` module
   },
-  async redirects() {
-    return [
-        {
-            source: '/eirene.txt',
-            destination: '/eirene',
-            basePath: false,
-            permanent: true
-        },
-        {
-            source: '/',
-            destination: '/test',
-            basePath: true,
-            permanent: true
-        }
-    ]
-  },
-  /*
-  async rewrites() {
-    return [
-      {
-        source: '/eirene',
-        destination: '/eirene/index.txt', // Rewrite /eirene to /eirene/index.txt
-      },
-      {
-        source: '/',
-        destination: '/eirene/index.txt',
-      }
-    ]
-  },
-  */
   assetPrefix: "https://mccullen.gitlab.io/eirene/",
-  //trailingSlash: true,
-  //productionBrowserSourceMaps: true,
   basePath
 }
 
