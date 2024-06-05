@@ -24,7 +24,7 @@ const nextConfig = {
     //}
     return config;// Fixes npm packages that depend on `fs` module
   },
-  assetPrefix: "https://mccullen.gitlab.io/eirene/",
+  //assetPrefix: "https://mccullen.gitlab.io/eirene/",
   basePath
 }
 
