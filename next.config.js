@@ -57,6 +57,8 @@ const nextConfig = {
   },
   */
   assetPrefix: "https://mccullen.gitlab.io/eirene/",
+  trailingSlash: true,
+  productionBrowserSourceMaps: true,
   basePath
 }
 
