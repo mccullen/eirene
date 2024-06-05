@@ -1,4 +1,4 @@
-let basePath = "/eirene/";
+let basePath = "/eirene";
 if (process.env.NEXT_PUBLIC_NODE_ENV === "vercel" || process.env.ENV === "dev") {
   // Running from vercel or local machine
   basePath = ""
@@ -40,6 +40,14 @@ const nextConfig = {
             permanent: true
         }
         */
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/eirene',
+        destination: '/eirene/index.txt', // Rewrite /eirene to /eirene/index.txt
+      }
     ]
   },
   //assetPrefix: "https://mccullen.gitlab.io/eirene/",
