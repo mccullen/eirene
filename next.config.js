@@ -47,6 +47,10 @@ const nextConfig = {
       {
         source: '/eirene',
         destination: '/eirene/index.txt', // Rewrite /eirene to /eirene/index.txt
+      },
+      {
+        source: '/',
+        destination: '/eirene/index.txt',
       }
     ]
   },
