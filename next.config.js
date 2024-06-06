@@ -1,10 +1,8 @@
-let basePath = "/eirene";
-/*
+let basePath = "/eunomia";
 if (process.env.NEXT_PUBLIC_NODE_ENV === "vercel" || process.env.ENV === "dev") {
   // Running from vercel or local machine
   basePath = ""
 } 
-*/
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
