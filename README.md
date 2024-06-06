@@ -61,6 +61,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - To deploy on vercel
   - Under project settings, set the NEXT_PUBLIC_NODE_ENV env variable to "vercel" so the basePath will be set correctly
   - Also, enable git lfs
+  - Also, override npm install to npm install --force
 - To deploy on gitlab
   - Check the .gitlab-ci.yml file
   - Essentially, we added 'export' to our next.config.js so that our static output would be generated and copied to the public directory
