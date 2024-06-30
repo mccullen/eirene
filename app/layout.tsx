@@ -21,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/*<GoogleTagManager gtmId="GTM-WF4C59B7" />*/}
-        <GoogleTagManager gtmId ="G-W3GEZ55QRH" />
+        <GoogleTagManager gtmId="GTM-WF4C59B7" />
+        {/*<GoogleTagManager gtmId ="G-W3GEZ55QRH" />*/}
         <Shell>
           {children}
         </Shell>
@@ -31,3 +31,8 @@ export default function RootLayout({
     </html>
   )
 }
+/*
+G-M1F38YXGQD
+GTM-WF4C59B7
+
+*/
