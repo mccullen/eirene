@@ -4,9 +4,6 @@ import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './shell';
 import ResultTable from './result-table';
-import { ResizableBox } from 'react-resizable';
-import SplitPane from "react-split-pane";
-import { Pane } from "react-split-pane";
 import { sendGTMEvent } from '@next/third-parties/google'
 
 function getHighlightedText(editor) {
