@@ -21,7 +21,7 @@ export default function Shell({ children }: any) {
             // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
             // You can omit locateFile completely when running in node
             locateFile: file => {
-                return `eunomia/${file}`;
+                return `eirene`;
               }
           });
           const response = await fetch("cdm.sqlite");
@@ -38,7 +38,7 @@ export default function Shell({ children }: any) {
             locateFile: file => {
                 console.log(file);
                 return file;
-                //return `eunomia/${file}`;
+                //return `eirene/${file}`;
               }
           });
           console.log("init2");
@@ -72,7 +72,7 @@ export default function Shell({ children }: any) {
                 <div className="flex space-x-4 items-center">
                   {/* logo */}
                   <div className="font-bold">
-                    <Link href="/" className="py-5 px-3 text-gray-700">Eunomia</Link>
+                    <Link href="/" className="py-5 px-3 text-gray-700">Eirene</Link>
                   </div>
 
                   {/* primary nav */}

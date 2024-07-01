@@ -6,8 +6,8 @@ console.log("layout.tsx log");
 import { Metadata } from 'next'
  
 export const metadata: Metadata = {
-  title: "Eunomia",
-  //metadataBase: new URL("https://mccullen.gitlab.io/eunomia/")
+  title: "Eirene",
+  //metadataBase: new URL("https://mccullen.gitlab.io/eirene/")
 }
 
 export default function RootLayout({

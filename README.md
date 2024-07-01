@@ -36,7 +36,7 @@ despite the fact that we are generating a static export. It can also
 be rather annoying when it is fine in development and then it crashes in
 production just because the linter got upset. 
 
-Gitlab deployment will be [here](https://mccullen.gitlab.io/eunomia/)
+Gitlab deployment will be [here](https://mccullen.gitlab.io/eirene/)
 
 ### Vercel
 The Gitlab repo is already linked to vercel so that pushes to 'main' will result in vercel deployment.
