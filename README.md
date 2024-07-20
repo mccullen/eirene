@@ -38,16 +38,16 @@ production just because the linter got upset.
 
 Gitlab deployment will be [here](https://mccullen.gitlab.io/eirene/)
 
-### Vercel
-The Gitlab repo is already linked to vercel so that pushes to 'main' will result in vercel deployment.
-The vercel deployment pipeline is defined under the project settings, but it essentially does the default, 
+### Netlify
+The Gitlab repo is already linked to netlify so that pushes to 'main' will result in vercel deployment.
+The netlify deployment pipeline is defined under the project settings, but it essentially does the default, 
 just runs "npm run build".
 
 In order to make this work on both gitlab and vercel, the following project settings are used
 - The NEXT_PUBLIC_NODE_ENV env variable is set to "vercel" so the basePath will be set correctly in next.config.js
 - Git lfs is enabled (not necessary unless we decide to move our sqlite db to lfs)
 
-The vercel deployment will be [here](https://eunomia.vercel.app/)
+The vercel deployment will be [here](https://eunomia.netlify.app/)
 
 ### API Routes
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
