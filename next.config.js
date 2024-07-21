@@ -15,6 +15,7 @@ const nextConfig = {
   output: 'export',
   webpack: (config, { isServer }) => {
     //if (!isServer) {
+      // Handle fs module fallback only for client-side builds
       config.resolve = {
         ...config.resolve,
         fallback: {
@@ -22,6 +23,7 @@ const nextConfig = {
         },
       };
     //}
+
     return config;// Fixes npm packages that depend on `fs` module
   },
   // Do not do. messes up sql.js
