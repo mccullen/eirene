@@ -6,6 +6,7 @@ import { GlobalContext } from './shell';
 import ResultTable from './result-table';
 import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
+//import Split from 'react-split-grid'
 
 function getHighlightedText(editor) {
   // Get the text model
@@ -101,32 +102,35 @@ export default function QueryEditor(props) {
   };
 
   return (
-    <div id="query-editor-wrapper">
-    <Split>
-      <button id="exe-btn" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 rounded' onClick={onExecute}>Execute</button>
-      <div id="outer-editor-wrapper" className={`border border-gray relative min-h-[30vh]`}>
-        <div id="inner-editor-wrapper" className="absolute inset-0 w-full h-full bg-lightblue">
-          <Editor 
-            height="100%"
-            width="100%"
-            theme="light"
-            defaultLanguage='sql'
-            defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
-            onChange={onChange}
-            onMount={onMount}
-            beforeMount={beforeMount}
-          />
-        {solution}
-        </div>
+    <>
+    <button id="exe-btn" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 rounded' onClick={onExecute}>Execute</button>
+    <Split
+        className="split"
+        direction="vertical"
+        minSize={0}
+        sizes={[25, 75]} // You can set initial sizes here
+    >
+      <div id="top-pane"
+      >
+        top
+        {/*
+        */}
+        <Editor 
+          height="100%"
+          width="100%"
+          theme="light"
+          defaultLanguage='sql'
+          defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
+          onChange={onChange}
+          onMount={onMount}
+          beforeMount={beforeMount}
+        />
       </div>
-      <span className="text-red-500">{errorMsg}</span>
-
-      <div onDrag={onDrag} className="border-t border-gray-300 my-4"></div>
-
-      <div className={`relative`}>
+      <div id="bottom-pane">
+        <div className="text-red-500 mt-5">{errorMsg}</div>
         <ResultTable className="result-tbl" columns={columns} data={data} />
       </div>
-      </Split>
-    </div>
+    </Split>
+    </>
   );
 }
