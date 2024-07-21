@@ -5,6 +5,7 @@ import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './shell';
 import ResultTable from './result-table';
 import { sendGTMEvent } from '@next/third-parties/google'
+import Split from 'react-split'
 
 function getHighlightedText(editor) {
   // Get the text model
@@ -28,6 +29,7 @@ export default function QueryEditor(props) {
   let [data, setData] = useState<any[]>([
   ]);
   const [editorHeight, setEditorHeight] = useState(300); // Initial height for the editor
+
   function onChange(value, event) {
     console.log("changed");
     console.log(value);
@@ -93,12 +95,17 @@ export default function QueryEditor(props) {
   const onResize = (event, { size }) => {
     setEditorHeight(size.height);
   };
+  
+  const onDrag = (event) => {
+    debugger;
+  };
 
   return (
-    <div>
+    <div id="query-editor-wrapper">
+    <Split>
       <button id="exe-btn" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 rounded' onClick={onExecute}>Execute</button>
-      <div className="border border-gray relative min-h-[30vh]">
-        <div className="absolute inset-0 w-full h-full bg-lightblue">
+      <div id="outer-editor-wrapper" className={`border border-gray relative min-h-[30vh]`}>
+        <div id="inner-editor-wrapper" className="absolute inset-0 w-full h-full bg-lightblue">
           <Editor 
             height="100%"
             width="100%"
@@ -114,11 +121,12 @@ export default function QueryEditor(props) {
       </div>
       <span className="text-red-500">{errorMsg}</span>
 
-      <div className="border-t border-gray-300 my-4"></div>
+      <div onDrag={onDrag} className="border-t border-gray-300 my-4"></div>
 
-      <div className="overflow-x-auto max-h-[50vh]">
+      <div className={`relative`}>
         <ResultTable className="result-tbl" columns={columns} data={data} />
       </div>
+      </Split>
     </div>
   );
 }
