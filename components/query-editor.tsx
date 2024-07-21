@@ -97,7 +97,7 @@ export default function QueryEditor(props) {
               width="100%"
               theme="light"
               defaultLanguage='sql'
-              defaultValue={props.defaultValue || "SELECT * FROM \nperson LIMIT 100;"}
+              defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
               onChange={onChange}
               onMount={onMount}
               beforeMount={beforeMount}

@@ -3,12 +3,27 @@ import { useEffect, createContext, useState, useRef } from 'react';
 import Link from 'next/link';
 import initSqlJs from "sql.js";
 import JSZip from 'jszip';
+import { usePathname } from 'next/navigation';
+
+const navItems = [
+  {
+    id: "home",
+    name: "Home",
+    path: "/"
+  },
+  {
+    id: "playground",
+    name: "Playground",
+    path: "/playground"
+  },
+];
 
 const GlobalContext = createContext<any>(null);
 export { GlobalContext };
 
 
 export default function Shell({ children }: any) {
+    const pathname = usePathname();
     let mobileMenu = useRef<any>(null);
     let [db, setDb] = useState<any>();
 
@@ -77,8 +92,21 @@ export default function Shell({ children }: any) {
 
                   {/* primary nav */}
                   <div className="hidden md:flex items-center space-x-1">
-                    <Link id="home-desktop-link" href="/" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Home</Link>
-                    <Link id="playground-desktop-link" href="/playground" className="py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300">Playground</Link>
+                    {
+                      navItems.map(({id, name, path}) => {
+                        const isActive = pathname === path;
+                        return (
+                          <Link
+                            key={path}
+                            id={id}
+                            href={path}
+                            className={`py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300  ${isActive ? 'text-blue-600 font-bold' : ''}`}
+                          >
+                            {name}
+                          </Link>
+                        );
+                      })
+                    }
                     {/*<Link href="/tutorial" className="py-5 px-3 text-gray-700 hover:text-gray-900 transition duration-300">Tutorial</Link>*/}
                   </div>
                 </div>
