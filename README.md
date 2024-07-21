@@ -1,3 +1,9 @@
+[Eirene](https://eirene.netlify.app/) is a playground for standardized observational health analytics using the OMOP Common Data Model.
+
+It allows you to query the [Eunomia Datasets](https://github.com/OHDSI/EunomiaDatasets) in sqlite in the browser. 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f343dd48-834e-4ac1-9202-81a1af29091e/deploy-status)](https://app.netlify.com/sites/eirene/deploys)
+
 ## Run
 Use the npm scripts in package.json to run
 ### Dev
@@ -13,17 +19,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 The page should auto-update as you edit files
 
 ## Deployment
-### Gitlab
-Gitlab will deploy on pushes to 'main' using the .gitlab-ci.yml. 
-
-Gitlab cannot use the backend API as it can only host static pages. However, since our web page is static this is fine. 
 To produce a static build, we just needed to set 
 ```
 output: 'export'
 ```
 in our next.config.js so our static web pages would be output to /out. 
 
-We also need to do this
+We also do this
 ```javascript
 eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -36,26 +38,10 @@ despite the fact that we are generating a static export. It can also
 be rather annoying when it is fine in development and then it crashes in
 production just because the linter got upset. 
 
-Gitlab deployment will be [here](https://mccullen.gitlab.io/eirene/)
-
 ### Netlify
-The Gitlab repo is already linked to netlify so that pushes to 'main' will result in vercel deployment.
+This GitHub repo is already linked to netlify so that pushes to 'main' will result in deployment.
 The netlify deployment pipeline is defined under the project settings, but it essentially does the default, 
 just runs "npm run build".
-
-In order to make this work on both gitlab and vercel, the following project settings are used
-- The NEXT_PUBLIC_NODE_ENV env variable is set to "vercel" so the basePath will be set correctly in next.config.js
-- Git lfs is enabled (not necessary unless we decide to move our sqlite db to lfs)
-
-The vercel deployment will be [here](https://eunomia.netlify.app/)
-
-### API Routes
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
 
 ## Notes
 - To deploy on vercel
