@@ -23,6 +23,7 @@ export { GlobalContext };
 
 
 export default function Shell({ children }: any) {
+    const pathname = usePathname();
     let mobileMenu = useRef<any>(null);
     let [db, setDb] = useState<any>();
 
@@ -93,12 +94,13 @@ export default function Shell({ children }: any) {
                   <div className="hidden md:flex items-center space-x-1">
                     {
                       navItems.map(({id, name, path}) => {
+                        const isActive = pathname === path;
                         return (
                           <Link
                             key={path}
                             id={id}
                             href={path}
-                            className="py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300"
+                            className={`py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300  ${isActive ? 'text-blue-600 font-bold' : ''}`}
                           >
                             {name}
                           </Link>
