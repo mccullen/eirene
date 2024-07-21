@@ -1,12 +1,10 @@
 "use client"
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
-
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './shell';
 import ResultTable from './result-table';
 import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
-//import Split from 'react-split-grid'
 
 function getHighlightedText(editor) {
   // Get the text model
@@ -81,56 +79,36 @@ export default function QueryEditor(props) {
     }
   }
 
-  let solution: any = null;
-  if (props.solution) {
-    solution = (
-          <div>
-            <button id="exe-btn" className=" text-blue-500 px-2" onClick={event => {
-              editorRef.current.getModel().setValue(props.solution);
-              onExecute(event);
-            }}>Show solution</button>
-          </div>
-    );
-  }
-
-  const onResize = (event, { size }) => {
-    setEditorHeight(size.height);
-  };
-  
-  const onDrag = (event) => {
-    debugger;
-  };
-
   return (
-    <>
-    <button id="exe-btn" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 rounded' onClick={onExecute}>Execute</button>
-    <Split
-        className="split"
-        direction="vertical"
-        minSize={0}
-        sizes={[25, 75]} // You can set initial sizes here
-    >
-      <div id="top-pane"
-      >
-        top
-        {/*
-        */}
-        <Editor 
-          height="100%"
-          width="100%"
-          theme="light"
-          defaultLanguage='sql'
-          defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
-          onChange={onChange}
-          onMount={onMount}
-          beforeMount={beforeMount}
-        />
+    <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
+      <div id="tool-bar" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex justify-between items-center">
+        <button id="exe-btn" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={onExecute}>Execute</button>
       </div>
-      <div id="bottom-pane">
-        <div className="text-red-500 mt-5">{errorMsg}</div>
-        <ResultTable className="result-tbl" columns={columns} data={data} />
+      <div id="split-wrapper">
+        <Split
+            className="split"
+            direction="vertical"
+            minSize={0}
+            sizes={[75, 25]} // You can set initial sizes here
+        >
+          <div id="top-pane">
+            <Editor 
+              height="90%"
+              width="100%"
+              theme="light"
+              defaultLanguage='sql'
+              defaultValue={props.defaultValue || "SELECT * FROM \nperson LIMIT 100;"}
+              onChange={onChange}
+              onMount={onMount}
+              beforeMount={beforeMount}
+            />
+          </div>
+          <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
+            <div className="text-red-500 mt-5">{errorMsg}</div>
+            <ResultTable className="result-tbl" columns={columns} data={data} />
+          </div>
+        </Split>
       </div>
-    </Split>
-    </>
+    </div>
   );
 }

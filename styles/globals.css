@@ -16,6 +16,7 @@
     cursor: row-resize;
 }
 
+/* Fill screen, minus the height of the header */
 .split {
-    height: 100vh; /* or any height you prefer */
+    height: calc(100vh - 140px);
 }
