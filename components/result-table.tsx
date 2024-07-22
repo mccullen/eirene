@@ -13,7 +13,7 @@ export default function ResultTable({ columns, data, className}) {
   });
 
   return (
-      <>
+    <div className={className}>
       {/* border-separate needed so border moves with sticky headers: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element */}
       <table className="border-separate">
       <thead>
@@ -60,6 +60,6 @@ export default function ResultTable({ columns, data, className}) {
         ))}
       </tfoot>
     </table>
-      </>
-    ) 
+  </div>
+  ) 
 }

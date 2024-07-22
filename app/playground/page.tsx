@@ -17,31 +17,9 @@ inner join concept c on c.concept_id = co.condition_concept_id
 group by co.condition_concept_id, c.vocabulary_id, c.concept_name
 order by count(*) desc;
 `
-  defaultValue = 
-`CREATE TEMP TABLE diagnosis
-AS
-SELECT
-person_id
-FROM
-person;
-ANALYZE diagnosis
-;
-`
 
   return (
   <>
     <QueryEditor defaultValue={defaultValue} />
   </>);
 }
-
-/*
-CREATE TEMP TABLE diagnosis
-AS
-SELECT
-person_id
-FROM
-person;
-ANALYZE diagnosis
-;
-
-*/

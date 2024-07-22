@@ -22,7 +22,7 @@ function getHighlightedText(editor) {
 
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
-  const [dialect, setDialect] = useState('sqlite');
+  const [dialect, setDialect] = useState('ohdsisql');
   let editorRef = useRef<any>(null);
   let monacoRef = useRef(null);
   let [errorMsg, setErrorMsg] = useState<string>("");
@@ -54,26 +54,33 @@ export default function QueryEditor(props) {
     console.log(editorRef.current);
     console.log("sending event");
     sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
+
+    // Gets only highlighted text
     const highlightedText = getHighlightedText(editorRef.current);
+
+    // Gets the full text
     let query = editorRef.current.getValue();
     if (dialect === "ohdsisql") {
+      // ohdsi sql selected, so translate to sqlite
       const body: TranslateBody = {
         targetdialect: "sqlite",
         SQL: query
       }
       query = await translate(body);
-      //query = query.replace(/\\n/g, '');
-      debugger;
     } 
-    /*
-    cdm.current.each(query, function(row, index, c) {
-      debugger;
-    });
-    */
+
+    // Now try and execute the query
     try {
       console.log("Executing query:");
       console.log(query);
+
+      const start = performance.now();
       const result = db.exec(query);
+      debugger;
+      const end = performance.now();
+      const executionTime = end - start;
+
+      
       if (result.length > 0) {
         // Only extract result if there are any
         // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
@@ -86,20 +93,16 @@ export default function QueryEditor(props) {
           });
           return row;
         });
-
-
         setColumns(cols);
         setData(rows);
-        console.log(highlightedText);
-        // Clear error if it was successful
-        setErrorMsg(m => "");
       }
+      // Clear error and set success msg
+      setErrorMsg(m => "");
+      setSuccessMsg(m => `Execution time ${executionTime}ms`);
     } catch (error: any) {
       setErrorMsg(error.message);
       setSuccessMsg("");
     }
-    // Clear error message
-    setSuccessMsg(m => "done");
   }
 
   return (
@@ -125,9 +128,13 @@ export default function QueryEditor(props) {
             />
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
-            <div className="text-red-500 mt-5">{errorMsg}</div>
-            <div className="text-black-500 mt-5">{successMsg}</div>
-            <ResultTable className="result-tbl" columns={columns} data={data} />
+            <span className="text-red-500 mt-5">{errorMsg}</span>
+            <span className="text-black-500 mt-5">{successMsg}</span>
+            <ResultTable 
+              className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
+              columns={columns} 
+              data={data} 
+            />
           </div>
         </Split>
       </div>
