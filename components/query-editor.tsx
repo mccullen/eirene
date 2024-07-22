@@ -7,18 +7,7 @@ import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
-
-function getHighlightedText(editor) {
-  // Get the text model
-  const model = editor.getModel();
-
-  // Get the selection range
-  const selection = editor.getSelection();
-
-  // Get the highlighted text
-  const highlightedText = model.getValueInRange(selection);
-  return highlightedText;
-}
+import { getHighlightedText, getColsAndRows } from "@/services/util";
 
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
@@ -86,14 +75,7 @@ export default function QueryEditor(props) {
         // Only extract result if there are any
         // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
         const r1: any = result[0];
-        const cols = r1.columns.map(c => { return { header: c, accessorKey: c} });
-        const rows = r1.values.map((r) => {
-          let row = {};
-          r.forEach((v, i) => {
-            row[cols[i].accessorKey] = v;
-          });
-          return row;
-        });
+        const {cols, rows} = getColsAndRows(r1);
         setColumns(cols);
         setData(rows);
         setResultVis(true);
