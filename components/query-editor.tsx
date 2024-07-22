@@ -22,10 +22,11 @@ function getHighlightedText(editor) {
 
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
-  const [dialect, setDialect] = useState('ohdsisql');
+  const [dialect, setDialect] = useState('sqlite');
   let editorRef = useRef<any>(null);
   let monacoRef = useRef(null);
   let [errorMsg, setErrorMsg] = useState<string>("");
+  let [successMsg, setSuccessMsg] = useState<string>("");
   let [columns, setColumns] = useState<any[]>([
   ]);
   let [data, setData] = useState<any[]>([
@@ -61,34 +62,44 @@ export default function QueryEditor(props) {
         SQL: query
       }
       query = await translate(body);
-      query = query.replace(/\\n/g, '');
+      //query = query.replace(/\\n/g, '');
+      debugger;
     } 
-    debugger;
     /*
     cdm.current.each(query, function(row, index, c) {
       debugger;
     });
     */
     try {
+      console.log("Executing query:");
+      console.log(query);
       const result = db.exec(query);
-      const r1: any = result[0];
-      const cols = r1.columns.map(c => { return { header: c, accessorKey: c} });
-      const rows = r1.values.map((r) => {
-        let row = {};
-        r.forEach((v, i) => {
-          row[cols[i].accessorKey] = v;
+      if (result.length > 0) {
+        // Only extract result if there are any
+        // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
+        const r1: any = result[0];
+        const cols = r1.columns.map(c => { return { header: c, accessorKey: c} });
+        const rows = r1.values.map((r) => {
+          let row = {};
+          r.forEach((v, i) => {
+            row[cols[i].accessorKey] = v;
+          });
+          return row;
         });
-        return row;
-      });
 
 
-      setColumns(cols);
-      setData(rows);
-      console.log(highlightedText);
-      setErrorMsg(m => "");
+        setColumns(cols);
+        setData(rows);
+        console.log(highlightedText);
+        // Clear error if it was successful
+        setErrorMsg(m => "");
+      }
     } catch (error: any) {
       setErrorMsg(error.message);
+      setSuccessMsg("");
     }
+    // Clear error message
+    setSuccessMsg(m => "done");
   }
 
   return (
@@ -115,6 +126,7 @@ export default function QueryEditor(props) {
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
             <div className="text-red-500 mt-5">{errorMsg}</div>
+            <div className="text-black-500 mt-5">{successMsg}</div>
             <ResultTable className="result-tbl" columns={columns} data={data} />
           </div>
         </Split>
