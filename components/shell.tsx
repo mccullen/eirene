@@ -67,7 +67,7 @@ export default function Shell({ children }: any) {
                 <div className="flex space-x-4 items-center">
                   {/* logo */}
                   <div className="font-bold">
-                    <Link href="/" className="py-5 px-3 text-gray-700">Eirene</Link>
+                    <Link href="/" className="py-5 px-3 text-green-500 hover:text-green-700">Eirene</Link>
                   </div>
 
                   {/* primary nav */}
@@ -80,7 +80,7 @@ export default function Shell({ children }: any) {
                             key={path}
                             id={id}
                             href={path}
-                            className={`py-5 px-3 text-gray-700 hover:text-blue-600 transition duration-300  ${isActive ? 'text-blue-600 font-bold' : ''}`}
+                            className={`py-5 px-3 hover:text-blue-600 transition duration-300  ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`}
                           >
                             {name}
                           </Link>
