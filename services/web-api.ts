@@ -1,4 +1,5 @@
-const baseUrl = "https://api.ohdsi.org/WebAPI/";
+const baseUrl = "https://api.ohdsi.org/WebAPI";
+const translatePath = "/sqlrender/translate";
 
 export interface TranslateBody {
     parameters?: any,
@@ -8,7 +9,7 @@ export interface TranslateBody {
 
 export async function translate(payload: TranslateBody) {
     const body = JSON.stringify(payload);
-    let response = await fetch("https://api.ohdsi.org/WebAPI/sqlrender/translate", {
+    let response = await fetch(`${baseUrl}${translatePath}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
