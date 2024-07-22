@@ -131,10 +131,10 @@ export default function QueryEditor(props) {
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
             <span className="text-red-500 mt-5">{errorMsg}</span>
+            <span className="text-black-500 mt-5">{successMsg}</span>
             { 
               resultVis && 
               <>
-                <span className="text-black-500 mt-5">{successMsg}</span>
                 <ResultTable 
                   className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
                   columns={columns} 
