@@ -27,6 +27,7 @@ export default function QueryEditor(props) {
   let monacoRef = useRef(null);
   let [errorMsg, setErrorMsg] = useState<string>("");
   let [successMsg, setSuccessMsg] = useState<string>("");
+  let [resultVis, setResultVis] = useState<boolean>(false);
   let [columns, setColumns] = useState<any[]>([
   ]);
   let [data, setData] = useState<any[]>([
@@ -51,6 +52,7 @@ export default function QueryEditor(props) {
   }
 
   async function onExecute(event) {
+    setResultVis(false);
     console.log(editorRef.current);
     console.log("sending event");
     sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
@@ -76,7 +78,6 @@ export default function QueryEditor(props) {
 
       const start = performance.now();
       const result = db.exec(query);
-      debugger;
       const end = performance.now();
       const executionTime = end - start;
 
@@ -95,6 +96,7 @@ export default function QueryEditor(props) {
         });
         setColumns(cols);
         setData(rows);
+        setResultVis(true);
       }
       // Clear error and set success msg
       setErrorMsg(m => "");
@@ -129,12 +131,17 @@ export default function QueryEditor(props) {
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
             <span className="text-red-500 mt-5">{errorMsg}</span>
-            <span className="text-black-500 mt-5">{successMsg}</span>
-            <ResultTable 
-              className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
-              columns={columns} 
-              data={data} 
-            />
+            { 
+              resultVis && 
+              <>
+                <span className="text-black-500 mt-5">{successMsg}</span>
+                <ResultTable 
+                  className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
+                  columns={columns} 
+                  data={data} 
+                />
+              </>
+            }
           </div>
         </Split>
       </div>
