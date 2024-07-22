@@ -4,7 +4,7 @@ import QueryEditor from '@/components/query-editor';
 export default function Playground() {
   console.log("playground");
 
-  const defaultValue = 
+  let defaultValue = 
 `-- Get the number of persons with each condition
 select 
   co.condition_concept_id, 

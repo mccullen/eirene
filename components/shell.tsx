@@ -29,34 +29,15 @@ export default function Shell({ children }: any) {
 
     // Put the DB into a global context so it persists across pages in the layout
     useEffect(() => {
-      /*
         async function init() {
-          console.log("init");
-          const SQL = await initSqlJs({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => {
-                return `eirene`;
-              }
-          });
-          const response = await fetch("cdm.sqlite");
-          const buffer = await response.arrayBuffer();
-          let tmp = new SQL.Database(new Uint8Array(buffer));
-          let r = tmp.exec("select * from person;");
-          setDb(tmp);
-        }
-        */
-        async function init2() {
           const SQL = await initSqlJs({
             // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
             // You can omit locateFile completely when running in node
             locateFile: file => {
                 console.log(file);
                 return file;
-                //return `eirene/${file}`;
               }
           });
-          console.log("init2");
           const response = await fetch("GiBleed_5.3_db.zip");
           const buffer = await response.arrayBuffer();
           const zip = await JSZip.loadAsync(buffer);
@@ -70,10 +51,9 @@ export default function Shell({ children }: any) {
             } catch (error) {
               console.error(error);
             }
-            //let r = tmp.exec("select * from person;");
           }
         }
-        init2();
+        init();
       }, []);
     return (
         <GlobalContext.Provider value={db}>
