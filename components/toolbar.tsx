@@ -9,8 +9,8 @@ export default function Toolbar({ onExecute, dialect, setDialect }) {
             onChange={event => setDialect(event.target.value)}
             className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded ml-4"
         >
-        <option value="sqlite">SQLite</option>
         <option value="ohdsisql">OHDSI SQL</option>
+        <option value="sqlite">SQLite</option>
       </select>
       </div>
     );
