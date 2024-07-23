@@ -143,7 +143,7 @@ export default function QueryEditor(props) {
             { 
               resultVis && (
                 <ResultTable 
-                  className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
+                  className={`result-tbl`} 
                   columns={columns} 
                   data={data} 
                 />
