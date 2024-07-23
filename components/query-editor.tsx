@@ -12,6 +12,7 @@ import { getHighlightedText, getColsAndRows } from "@/services/util";
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
   const [dialect, setDialect] = useState('ohdsisql');
+  const splitRef = useRef<any>(null);
   let editorRef = useRef<any>(null);
   let monacoRef = useRef(null);
   let [errorMsg, setErrorMsg] = useState<string>("");
@@ -19,7 +20,7 @@ export default function QueryEditor(props) {
   let [resultVis, setResultVis] = useState<boolean>(false);
   let [rowsAndCols, setRowsAndCols] = useState<any[]>([
   ]);
-  let [splitSize, setSplitSize] = useState<number[]>([50, 50]);
+  let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
   let [columns, setColumns] = useState<any[]>([
   ]);
   let [data, setData] = useState<any[]>([
@@ -90,6 +91,15 @@ export default function QueryEditor(props) {
         const rowCols = result.map(r => getColsAndRows(r));
         setRowsAndCols(rowCols);
 
+        const currentSplit = splitRef.current;
+        const sizes = currentSplit?.split?.getSizes();
+        const firstSize = sizes ? sizes[0] : 50;
+        const fillVal = (100-firstSize)/result.length;
+        let newSplitSizes = [firstSize, ...Array(result.length).fill(fillVal)];
+        debugger;
+        currentSplit.split.setSizes(newSplitSizes);
+        //setSplitSizes(newSplitSizes);
+
         // Just take the last one for now
         const r1: any = result[result.length-1];
         const {cols, rows} = getColsAndRows(r1);
@@ -122,10 +132,11 @@ export default function QueryEditor(props) {
 
       <div id="split-wrapper">
         <Split
+            ref={splitRef}
             className="split"
             direction="vertical"
             minSize={0}
-            sizes={[50,50]} // You can set initial sizes here
+            sizes={splitSizes} // You can set initial sizes here
         >
           <div id="top-pane">
             <Editor 
@@ -139,17 +150,22 @@ export default function QueryEditor(props) {
               beforeMount={beforeMount}
             />
           </div>
-          <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
+          {!resultVis && <div id="bottom-pane" className="overflow-x-auto overflow-y-auto"></div>}
             { 
-              resultVis && (
-                <ResultTable 
-                  className={`result-tbl`} 
-                  columns={columns} 
-                  data={data} 
-                />
-              )
+              resultVis && rowsAndCols.map((rc, i) => {
+                const {rows, cols} = rc;
+                //debugger;
+                return (
+                  <ResultTable 
+                    key={i}
+                    className={`result-tbl overflow-x-auto overflow-y-auto`} 
+                    columns={cols} 
+                    data={rows} 
+                  />
+                )
+              })
             }
-          </div>
+          {/*</div>*/}
         </Split>
       </div>
     </div>
