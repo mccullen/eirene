@@ -112,7 +112,14 @@ export default function QueryEditor(props) {
 
   return (
     <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
-      <Toolbar onExecute={onExecute} dialect={dialect} setDialect={setDialect} />
+      <Toolbar 
+        onExecute={onExecute} 
+        dialect={dialect} 
+        setDialect={setDialect} 
+        errorMsg={errorMsg}
+        successMsg={successMsg}
+      />
+
       <div id="split-wrapper">
         <Split
             className="split"
@@ -133,17 +140,14 @@ export default function QueryEditor(props) {
             />
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
-            <span className="text-red-500 mt-5">{errorMsg}</span>
-            <span className="text-black-500 mt-5">{successMsg}</span>
             { 
-              resultVis && 
-              <>
+              resultVis && (
                 <ResultTable 
                   className={`result-tbl ${errorMsg === "" ? "block" : "hidden"}`} 
                   columns={columns} 
                   data={data} 
                 />
-              </>
+              )
             }
           </div>
         </Split>
