@@ -41,3 +41,5 @@ external/eunomia-datasets/datasets/
 
 *.RData
 *.Rhistory
+
+__private/

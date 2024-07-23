@@ -17,6 +17,9 @@ export default function QueryEditor(props) {
   let [errorMsg, setErrorMsg] = useState<string>("");
   let [successMsg, setSuccessMsg] = useState<string>("");
   let [resultVis, setResultVis] = useState<boolean>(false);
+  let [rowsAndCols, setRowsAndCols] = useState<any[]>([
+  ]);
+  let [splitSize, setSplitSize] = useState<number[]>([50, 50]);
   let [columns, setColumns] = useState<any[]>([
   ]);
   let [data, setData] = useState<any[]>([
@@ -41,6 +44,7 @@ export default function QueryEditor(props) {
   }
 
   async function onExecute(event) {
+    // Hide results while executing. Will show if no error occurs
     setResultVis(false);
     console.log(editorRef.current);
     console.log("sending event");
@@ -49,8 +53,15 @@ export default function QueryEditor(props) {
     // Gets only highlighted text
     const highlightedText = getHighlightedText(editorRef.current);
 
-    // Gets the full text
-    let query = editorRef.current.getValue();
+    // If text is highlighted, just use that, not the full text
+    let query = "";
+    if (highlightedText) {
+      query = highlightedText;
+    } else {
+      // Gets the full text
+      query = editorRef.current.getValue();
+    }
+
     if (dialect === "ohdsisql") {
       // ohdsi sql selected, so translate to sqlite
       const body: TranslateBody = {
@@ -65,6 +76,7 @@ export default function QueryEditor(props) {
       console.log("Executing query:");
       console.log(query);
 
+      // Executing query and getting exec time
       const start = performance.now();
       const result = db.exec(query);
       const end = performance.now();
@@ -74,12 +86,21 @@ export default function QueryEditor(props) {
       if (result.length > 0) {
         // Only extract result if there are any
         // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
-        const r1: any = result[0];
+
+        const rowCols = result.map(r => getColsAndRows(r));
+        setRowsAndCols(rowCols);
+
+        // Just take the last one for now
+        const r1: any = result[result.length-1];
         const {cols, rows} = getColsAndRows(r1);
+
         setColumns(cols);
         setData(rows);
+
+        // Since there are results, we want to show them...
         setResultVis(true);
       }
+
       // Clear error and set success msg
       setErrorMsg(m => "");
       setSuccessMsg(m => `Execution time ${executionTime}ms`);
@@ -97,11 +118,11 @@ export default function QueryEditor(props) {
             className="split"
             direction="vertical"
             minSize={0}
-            sizes={[75, 25]} // You can set initial sizes here
+            sizes={[50,50]} // You can set initial sizes here
         >
           <div id="top-pane">
             <Editor 
-              height="90%"
+              height="100%"
               width="100%"
               theme="light"
               defaultLanguage='sql'
