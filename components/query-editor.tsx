@@ -8,6 +8,7 @@ import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
 import { getHighlightedText, getColsAndRows } from "@/services/util";
+import Sp from 'split.js'
 
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
@@ -26,6 +27,39 @@ export default function QueryEditor(props) {
   let [data, setData] = useState<any[]>([
   ]);
   const [editorHeight, setEditorHeight] = useState(300); // Initial height for the editor
+  let splitApi = useRef<any>(null);
+  let exec = useRef<any>(false);
+
+  useEffect(() => {
+      debugger;
+    if (exec.current) {
+    const sizes = splitApi.current.getSizes();
+    const firstSize = sizes ? sizes[0] : 50;
+    const denominator = rowsAndCols.length || 1
+    const fillVal = (100-firstSize)/denominator;
+    let newSplitSizes = [firstSize, ...Array(denominator).fill(fillVal)];
+    splitApi.current.destroy();
+    setSplitSizes(newSplitSizes);
+    let props: any = {
+      direction: "vertical",
+      minSize: 0,
+      sizes: newSplitSizes
+    };
+    let bottoms = [];
+    splitApi.current = Sp(["#top-pane", "#bottom-pane-0", "#bottom-pane-1"], props);
+  }
+  }, [ rowsAndCols ]);
+
+  useEffect(() => {
+    const defaults: any = {
+      direction: "vertical",
+      minSize: 0,
+      sizes: [50,50]
+    };
+    //let splitApi = Sp([".split-element"], defaults);
+    splitApi.current = splitApi.current || Sp(["#top-pane", "#bottom-pane"], defaults);
+  }, [ ]);
+
 
   function onChange(value, event) {
     console.log("changed");
@@ -45,6 +79,7 @@ export default function QueryEditor(props) {
   }
 
   async function onExecute(event) {
+    exec.current = true;
     // Hide results while executing. Will show if no error occurs
     setResultVis(false);
     console.log(editorRef.current);
@@ -91,14 +126,20 @@ export default function QueryEditor(props) {
         const rowCols = result.map(r => getColsAndRows(r));
         setRowsAndCols(rowCols);
 
+        ///////////
+
+        /*
         const currentSplit = splitRef.current;
         const sizes = currentSplit?.split?.getSizes();
         const firstSize = sizes ? sizes[0] : 50;
-        const fillVal = (100-firstSize)/result.length;
-        let newSplitSizes = [firstSize, ...Array(result.length).fill(fillVal)];
+        const denominator = rowsAndCols.length || 1
+        const fillVal = (100-firstSize)/denominator;
+        let newSplitSizes = [firstSize, ...Array(denominator).fill(fillVal)];
         debugger;
-        currentSplit.split.setSizes(newSplitSizes);
-        //setSplitSizes(newSplitSizes);
+        currentSplit.split.destroy();
+        //currentSplit.split.setSizes(newSplitSizes);
+        setSplitSizes(newSplitSizes);
+        */
 
         // Just take the last one for now
         const r1: any = result[result.length-1];
@@ -131,6 +172,7 @@ export default function QueryEditor(props) {
       />
 
       <div id="split-wrapper">
+        {/*
         <Split
             ref={splitRef}
             className="split"
@@ -138,7 +180,9 @@ export default function QueryEditor(props) {
             minSize={0}
             sizes={splitSizes} // You can set initial sizes here
         >
-          <div id="top-pane">
+            */}
+        <div className="split">
+          <div id="top-pane" className="split-element">
             <Editor 
               height="100%"
               width="100%"
@@ -150,23 +194,24 @@ export default function QueryEditor(props) {
               beforeMount={beforeMount}
             />
           </div>
-          {!resultVis && <div id="bottom-pane" className="overflow-x-auto overflow-y-auto"></div>}
+          {!resultVis && <div id="bottom-pane" className="split-element overflow-x-auto overflow-y-auto"></div>}
             { 
               resultVis && rowsAndCols.map((rc, i) => {
                 const {rows, cols} = rc;
                 //debugger;
                 return (
                   <ResultTable 
+                    id={`bottom-pane-${i}`}
                     key={i}
-                    className={`result-tbl overflow-x-auto overflow-y-auto`} 
+                    className={`split-element result-tbl overflow-x-auto overflow-y-auto`} 
                     columns={cols} 
                     data={rows} 
                   />
                 )
               })
             }
-          {/*</div>*/}
-        </Split>
+        </div>
+        {/*</Split>*/}
       </div>
     </div>
   );

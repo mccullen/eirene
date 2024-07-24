@@ -17,6 +17,10 @@ inner join concept c on c.concept_id = co.condition_concept_id
 group by co.condition_concept_id, c.vocabulary_id, c.concept_name
 order by count(*) desc;
 `
+defaultValue =
+`select * from person limit 10;
+select * from condition_occurrence limit 10;
+`
 
   return (
   <>
