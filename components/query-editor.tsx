@@ -7,8 +7,7 @@ import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
-import { getHighlightedText, getColsAndRows } from "@/services/util";
-import './query-editor.module.css';
+import { getHighlightedText, getColsAndRows, round } from "@/services/util";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
@@ -19,6 +18,7 @@ export default function QueryEditor(props) {
   let [errorMsg, setErrorMsg] = useState<string>("");
   let [successMsg, setSuccessMsg] = useState<string>("");
   let [resultVis, setResultVis] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState(0);
   let [rowsAndCols, setRowsAndCols] = useState<any[]>([
   ]);
   let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
@@ -84,7 +84,7 @@ export default function QueryEditor(props) {
       const start = performance.now();
       const result = db.exec(query);
       const end = performance.now();
-      const executionTime = end - start;
+      let executionTime = round(end - start, 2);
 
       
       if (result.length > 0) {
@@ -100,6 +100,7 @@ export default function QueryEditor(props) {
 
         setColumns(cols);
         setData(rows);
+        setActiveTab(0);
 
         // Since there are results, we want to show them...
         setResultVis(true);
@@ -146,7 +147,9 @@ export default function QueryEditor(props) {
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
             { 
               resultVis && (
-                <Tabs key="tabs" n={rowsAndCols.length} />
+                <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
+                  setActiveTab(i);
+                }} />
               )
             }
             { 
@@ -155,9 +158,9 @@ export default function QueryEditor(props) {
                 //debugger;
                 return (
                   <ResultTable 
-                    id={`bottom-pane-${i}`}
+                    id={`result-table-${i}`}
                     key={i}
-                    className={`result-tbl`} 
+                    className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
                     columns={cols} 
                     data={rows} 
                   />

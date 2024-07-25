@@ -20,7 +20,7 @@ export default function ResultTable({ columns, data, className, id}) {
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <th key={header.id} className="border border-black p-2 sticky bg-white top-0">
+              <th key={header.id} className="border border-black p-2 sticky bg-white top-8">
                 {header.isPlaceholder
                   ? null
                   : flexRender(
