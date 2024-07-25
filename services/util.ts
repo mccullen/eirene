@@ -32,3 +32,8 @@ export function getCols(result) {
   const cols = result.columns.map(c => { return { header: c, accessorKey: c} });
   return cols
 }
+
+export function round(input: number, nDecimalPlaces: number) {
+  const d = Math.pow(10, nDecimalPlaces);
+  return Math.round(input * d) / d;
+}

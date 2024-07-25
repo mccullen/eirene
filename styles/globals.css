@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
+/* split js */
 .gutter {
     background-color: #eee;
     background-repeat: no-repeat;
@@ -16,7 +16,7 @@
     cursor: row-resize;
 }
 
-/* Fill screen, minus the height of the header */
 .split {
+    /* Fill screen, minus the height of the header */
     height: calc(100vh - 140px);
 }
