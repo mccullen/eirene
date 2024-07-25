@@ -1,7 +1,6 @@
 import Shell from '@/components/shell';
 import '../styles/globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
-console.log("layout.tsx log");
 
 import { Metadata } from 'next'
  

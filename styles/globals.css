@@ -20,11 +20,3 @@
     /* Fill screen, minus the height of the header */
     height: calc(100vh - 140px);
 }
-
-
-/*  */
-/*
-#bottom-pane th {
-    top: 100px;
-}
-    */

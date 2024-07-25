@@ -11,109 +11,103 @@ import { getHighlightedText, getColsAndRows, round } from "@/services/util";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-  const db = useContext(GlobalContext);
-  const [dialect, setDialect] = useState('ohdsisql');
-  let editorRef = useRef<any>(null);
-  let monacoRef = useRef(null);
-  let [errorMsg, setErrorMsg] = useState<string>("");
-  let [successMsg, setSuccessMsg] = useState<string>("");
-  let [resultVis, setResultVis] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState(0);
-  let [rowsAndCols, setRowsAndCols] = useState<any[]>([
-  ]);
-  let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
-  let [columns, setColumns] = useState<any[]>([
-  ]);
-  let [data, setData] = useState<any[]>([
-  ]);
-  let exec = useRef<any>(false);
+    const db = useContext(GlobalContext);
+    const [dialect, setDialect] = useState('ohdsisql');
+    let editorRef = useRef<any>(null);
+    let monacoRef = useRef(null);
+    let [errorMsg, setErrorMsg] = useState<string>("");
+    let [successMsg, setSuccessMsg] = useState<string>("");
+    let [resultVis, setResultVis] = useState<boolean>(false);
+    const [activeTab, setActiveTab] = useState(0);
+    let [rowsAndCols, setRowsAndCols] = useState<any[]>([
+    ]);
+    let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
+    let [columns, setColumns] = useState<any[]>([
+    ]);
+    let [data, setData] = useState<any[]>([
+    ]);
+    let exec = useRef<any>(false);
 
-
-  function onChange(value, event) {
-    console.log("changed");
-    console.log(value);
-    console.log(event);
-  }
-  
-  function onMount(editor, monaco) {
-    editorRef.current = editor;
-    console.log("mounted");
-    console.log(editor);
-    console.log(monaco);
-  }
-  
-  function beforeMount(monaco) {
-    monacoRef.current = monaco;
-  }
-
-  async function onExecute(event) {
-    exec.current = true;
-    // Hide results while executing. Will show if no error occurs
-    setResultVis(false);
-    console.log(editorRef.current);
-    console.log("sending event");
-    sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
-
-    // Gets only highlighted text
-    const highlightedText = getHighlightedText(editorRef.current);
-
-    // If text is highlighted, just use that, not the full text
-    let query = "";
-    if (highlightedText) {
-      query = highlightedText;
-    } else {
-      // Gets the full text
-      query = editorRef.current.getValue();
+    function beforeMount(monaco) {
+        monacoRef.current = monaco;
     }
 
-    if (dialect === "ohdsisql") {
-      // ohdsi sql selected, so translate to sqlite
-      const body: TranslateBody = {
-        targetdialect: "sqlite",
-        SQL: query
-      }
-      query = await translate(body);
-    } 
-
-    // Now try and execute the query
-    try {
-      console.log("Executing query:");
-      console.log(query);
-
-      // Executing query and getting exec time
-      const start = performance.now();
-      const result = db.exec(query);
-      const end = performance.now();
-      let executionTime = round(end - start, 2);
-
-      
-      if (result.length > 0) {
-        // Only extract result if there are any
-        // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
-
-        const rowCols = result.map(r => getColsAndRows(r));
-        setRowsAndCols(rowCols);
-
-        // Just take the last one for now
-        const r1: any = result[result.length-1];
-        const {cols, rows} = getColsAndRows(r1);
-
-        setColumns(cols);
-        setData(rows);
-        setActiveTab(0);
-
-        // Since there are results, we want to show them...
-        setResultVis(true);
-      }
-
-      // Clear error and set success msg
-      setErrorMsg(m => "");
-      setSuccessMsg(m => `Execution time ${executionTime}ms`);
-    } catch (error: any) {
-      setErrorMsg(error.message);
-      setSuccessMsg("");
+    function onMount(editor, monaco) {
+        editorRef.current = editor;
     }
-  }
+
+    function onChange(value, event) {
+        //console.log(value);
+        //console.log(event);
+    }
+    
+
+    async function onExecute(event) {
+        exec.current = true;
+        // Hide results while executing. Will show if no error occurs
+        setResultVis(false);
+        sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
+
+        // Gets only highlighted text
+        const highlightedText = getHighlightedText(editorRef.current);
+
+        // If text is highlighted, just use that, not the full text
+        let query = "";
+        if (highlightedText) {
+            query = highlightedText;
+        } else {
+            // Gets the full text
+            query = editorRef.current.getValue();
+        }
+
+        if (dialect === "ohdsisql") {
+            // ohdsi sql selected, so translate to sqlite
+            const body: TranslateBody = {
+                targetdialect: "sqlite",
+                SQL: query
+            }
+            query = await translate(body);
+        } 
+
+        // Now try and execute the query
+        try {
+            console.log("Executing query:");
+            console.log(query);
+
+            // Executing query and getting exec time
+            const start = performance.now();
+            const result = db.exec(query);
+            const end = performance.now();
+            let executionTime = round(end - start, 2);
+
+            
+            if (result.length > 0) {
+                // Only extract result if there are any
+                // We allow you to exec sql that has no result (ex: inserts into tables, etc.)
+
+                const rowCols = result.map(r => getColsAndRows(r));
+                setRowsAndCols(rowCols);
+
+                // Just take the last one for now
+                const r1: any = result[result.length-1];
+                const {cols, rows} = getColsAndRows(r1);
+
+                setColumns(cols);
+                setData(rows);
+                setActiveTab(0);
+
+                // Since there are results, we want to show them...
+                setResultVis(true);
+            }
+
+            // Clear error and set success msg
+            setErrorMsg(m => "");
+            setSuccessMsg(m => `Execution time ${executionTime}ms`);
+        } catch (error: any) {
+            setErrorMsg(error.message);
+            setSuccessMsg("");
+        }
+    }
 
   return (
     <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
@@ -155,7 +149,6 @@ export default function QueryEditor(props) {
             { 
               resultVis && rowsAndCols.map((rc, i) => {
                 const {rows, cols} = rc;
-                //debugger;
                 return (
                   <ResultTable 
                     id={`result-table-${i}`}
