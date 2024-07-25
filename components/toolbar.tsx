@@ -1,5 +1,11 @@
+import { useContext } from "react";
+import { GlobalContext } from "./shell";
+import { downloadDb } from "@/services/util";
+
+
 
 export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg }) {
+    const db = useContext(GlobalContext);
 
     return (
       <div id="tool-bar" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex justify-between items-center">
@@ -26,6 +32,11 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
             )}
           </div>
         </div>
+
+        {/* Right side */}
+        <button onClick={() => downloadDb(db)}>
+          Download
+        </button>
         <select
             value={dialect}
             onChange={event => setDialect(event.target.value)}
