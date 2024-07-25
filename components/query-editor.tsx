@@ -8,6 +8,8 @@ import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
 import { getHighlightedText, getColsAndRows } from "@/services/util";
+import './query-editor.module.css';
+import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
   const db = useContext(GlobalContext);
@@ -142,6 +144,11 @@ export default function QueryEditor(props) {
             />
           </div>
           <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
+            { 
+              resultVis && (
+                <Tabs key="tabs" n={rowsAndCols.length} />
+              )
+            }
             { 
               resultVis && rowsAndCols.map((rc, i) => {
                 const {rows, cols} = rc;
