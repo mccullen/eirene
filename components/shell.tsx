@@ -1,9 +1,10 @@
 "use client"
-import { useEffect, createContext, useState, useRef } from 'react';
+import { useEffect, createContext, useState, useRef, useContext } from 'react';
 import Link from 'next/link';
 import initSqlJs from "sql.js";
 import JSZip from 'jszip';
 import { usePathname } from 'next/navigation';
+import { GlobalContext } from "./global-provider";
 
 const navItems = [
   {
@@ -18,11 +19,9 @@ const navItems = [
   },
 ];
 
-const GlobalContext = createContext<any>(null);
-export { GlobalContext };
-
 
 export default function Shell({ children }: any) {
+    const { connectDatabase } = useContext(GlobalContext);
     const pathname = usePathname();
     let mobileMenu = useRef<any>(null);
     let [db, setDb] = useState<any>();
@@ -30,13 +29,6 @@ export default function Shell({ children }: any) {
     // Put the DB into a global context so it persists across pages in the layout
     useEffect(() => {
         async function init() {
-          const SQL = await initSqlJs({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => {
-                return file;
-              }
-          });
           const response = await fetch("GiBleed_5.3_db.zip");
           const buffer = await response.arrayBuffer();
           const zip = await JSZip.loadAsync(buffer);
@@ -45,17 +37,17 @@ export default function Shell({ children }: any) {
 
           if (sqliteBuffer) {
             try {
-              let tmp = new SQL.Database(new Uint8Array(sqliteBuffer));
-              setDb(tmp);
+                debugger;
+                await connectDatabase("gibleed", sqliteBuffer);
             } catch (error) {
-              console.error(error);
+                console.error(error);
             }
           }
         }
         init();
-      }, []);
+      }, [connectDatabase]);
     return (
-        <GlobalContext.Provider value={db}>
+        <>
           {/* Navbar goes here */}
           <nav className="bg-gray-100">
             {/* overall container */}
@@ -116,6 +108,6 @@ export default function Shell({ children }: any) {
           <div className="px-8">
             {children}
           </div>
-        </GlobalContext.Provider>
+        </>
     );
 }

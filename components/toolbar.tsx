@@ -1,18 +1,20 @@
-import { useContext } from "react";
-import { GlobalContext } from "./shell";
+import { useContext, useState } from "react";
+import { GlobalContext } from "./global-provider";
 import { downloadDb } from "@/services/util";
 
 
 
 export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg }) {
-    const db = useContext(GlobalContext);
+    const { getCurrentDatabase, dbReady } = useContext(GlobalContext);
+    const [disabled, setDisabled] = useState<boolean>(true);
 
     return (
       <div id="tool-bar" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <button 
             id="exe-btn" 
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' 
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${dbReady ? '' : 'opacity-50 cursor-not-allowed'}`}
+            disabled={!dbReady}
             onClick={onExecute}
           >
             Execute
@@ -34,7 +36,7 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
         </div>
 
         {/* Right side */}
-        <button onClick={() => downloadDb(db)}>
+        <button onClick={() => downloadDb(getCurrentDatabase())}>
           Download
         </button>
         <select
