@@ -121,45 +121,54 @@ export default function QueryEditor(props) {
 
       <div id="split-wrapper">
         <Split
-            className="split"
-            direction="vertical"
+            className="split-horizontal"
             minSize={0}
-            sizes={splitSizes} // You can set initial sizes here
+            sizes={[25, 75]} // You can set initial sizes here
         >
-          <div id="top-pane">
-            <Editor 
-              height="100%"
-              width="100%"
-              theme="light"
-              defaultLanguage='sql'
-              defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
-              onChange={onChange}
-              onMount={onMount}
-              beforeMount={beforeMount}
-            />
-          </div>
-          <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
-            { 
-              resultVis && (
-                <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
-                  setActiveTab(i);
-                }} />
-              )
-            }
-            { 
-              resultVis && rowsAndCols.map((rc, i) => {
-                const {rows, cols} = rc;
-                return (
-                  <ResultTable 
-                    id={`result-table-${i}`}
-                    key={i}
-                    className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
-                    columns={cols} 
-                    data={rows} 
-                  />
-                )
-              })
-            }
+          <div id="hello"><h1>Hello</h1></div>
+          <div id="right-side-split">
+            <Split
+                className="split-vertical"
+                direction="vertical"
+                minSize={0}
+                sizes={splitSizes} // You can set initial sizes here
+            >
+              <div id="top-pane">
+                <Editor 
+                  height="100%"
+                  width="100%"
+                  theme="light"
+                  defaultLanguage='sql'
+                  defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
+                  onChange={onChange}
+                  onMount={onMount}
+                  beforeMount={beforeMount}
+                />
+              </div>
+              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
+                { 
+                  resultVis && (
+                    <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
+                      setActiveTab(i);
+                    }} />
+                  )
+                }
+                { 
+                  resultVis && rowsAndCols.map((rc, i) => {
+                    const {rows, cols} = rc;
+                    return (
+                      <ResultTable 
+                        id={`result-table-${i}`}
+                        key={i}
+                        className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
+                        columns={cols} 
+                        data={rows} 
+                      />
+                    )
+                  })
+                }
+              </div>
+            </Split>
           </div>
         </Split>
       </div>
