@@ -8,6 +8,7 @@ import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
 import { getHighlightedText, getColsAndRows, round } from "@/services/util";
+import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
@@ -125,7 +126,7 @@ export default function QueryEditor(props) {
             minSize={0}
             sizes={[25, 75]} // You can set initial sizes here
         >
-          <div id="hello"><h1>Hello</h1></div>
+          <ObjectExplorer />
           <div id="right-side-split">
             <Split
                 className="split-vertical"
