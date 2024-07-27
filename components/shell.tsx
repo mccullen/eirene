@@ -37,7 +37,6 @@ export default function Shell({ children }: any) {
 
           if (sqliteBuffer) {
             try {
-                debugger;
                 await connectDatabase("gibleed", sqliteBuffer);
             } catch (error) {
                 console.error(error);
