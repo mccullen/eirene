@@ -18,9 +18,10 @@ export default function ResultTable({ columns, data, className, id}) {
       <table className="border-separate border-spacing-0">
       <thead>
         {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
+          <tr key={headerGroup.id} className="">
+            {/* top-8 puts headers below the tabs, which is necessary since sticky is relative to nearest scrollable parent, which is the same for the tab */}
             {headerGroup.headers.map(header => (
-              <th key={header.id} className="border border-black p-2 sticky bg-white top-8">
+              <th key={header.id} className="z-10 font-semibold border border-gray-700 p-2 sticky bg-gray-50 top-8 text-gray-700">
                 {header.isPlaceholder
                   ? null
                   : flexRender(
@@ -32,11 +33,11 @@ export default function ResultTable({ columns, data, className, id}) {
           </tr>
         ))}
       </thead>
-      <tbody>
+      <tbody className="">
         {table.getRowModel().rows.map(row => (
-          <tr key={row.id}>
+          <tr key={row.id} className="hover:bg-gray-100">
             {row.getVisibleCells().map(cell => (
-              <td key={cell.id} className="border border-black p-2">
+              <td key={cell.id} className="border border-gray-700 p-1 text-gray-700">
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
