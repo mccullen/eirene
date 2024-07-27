@@ -1,3 +1,5 @@
+import fs from "fs";
+
 // Extracts highlighted text from monaco editor
 export function getHighlightedText(editor) {
   // Get the text model
@@ -36,4 +38,20 @@ export function getCols(result) {
 export function round(input: number, nDecimalPlaces: number) {
   const d = Math.pow(10, nDecimalPlaces);
   return Math.round(input * d) / d;
+}
+
+export function downloadDb(db) {
+  // Export database to binary format
+  const binaryArray = db.export();
+
+  // Create blob from binary
+  const blob = new Blob([binaryArray], { type: 'application/octet-stream' });
+
+  // Create a download link
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'database.sqlite'; // Specify the filename
+
+  // Trigger the download
+  link.click();
 }

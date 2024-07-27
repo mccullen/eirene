@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
 
 import { Metadata } from 'next'
+import { GlobalProvider } from "@/components/global-provider";
  
 export const metadata: Metadata = {
   title: "Eirene",
@@ -19,13 +20,14 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <GoogleTagManager gtmId="GTM-WF4C59B7" />
       <body>
-        <GoogleTagManager gtmId="GTM-WF4C59B7" />
-        <Shell>
-          {children}
-        </Shell>
+        <GlobalProvider>
+          <Shell>
+            {children}
+          </Shell>
+        </GlobalProvider>
       </body>
     </html>
   )
-
 }

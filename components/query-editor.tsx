@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
 import { Editor } from '@monaco-editor/react';
-import { GlobalContext } from './shell';
+import { GlobalContext } from './global-provider';
 import ResultTable from './result-table';
 import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
@@ -11,7 +11,7 @@ import { getHighlightedText, getColsAndRows, round } from "@/services/util";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    const db = useContext(GlobalContext);
+    const { getCurrentDatabase } = useContext(GlobalContext);
     const [dialect, setDialect] = useState('ohdsisql');
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
@@ -76,7 +76,7 @@ export default function QueryEditor(props) {
 
             // Executing query and getting exec time
             const start = performance.now();
-            const result = db.exec(query);
+            const result = getCurrentDatabase().exec(query);
             const end = performance.now();
             let executionTime = round(end - start, 2);
 
