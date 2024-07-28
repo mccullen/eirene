@@ -12,22 +12,20 @@ import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    let { getCurrentDatabase, defaultValue, setDefaultValue } = useContext(GlobalContext);
+    let { getCurrentDatabase, defaultValue, setDefaultValue, rowsAndCols, setRowsAndCols, resultVis, setResultVis } = useContext(GlobalContext);
     const [dialect, setDialect] = useState('ohdsisql');
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
     let [errorMsg, setErrorMsg] = useState<string>("");
     let [successMsg, setSuccessMsg] = useState<string>("");
-    let [resultVis, setResultVis] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState(0);
-    let [rowsAndCols, setRowsAndCols] = useState<any[]>([
-    ]);
     let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
     let [columns, setColumns] = useState<any[]>([
     ]);
     let [data, setData] = useState<any[]>([
     ]);
     let exec = useRef<any>(false);
+    debugger;
 
     function beforeMount(monaco) {
         monacoRef.current = monaco;

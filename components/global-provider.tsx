@@ -22,6 +22,8 @@ function GlobalProvider({children}) {
     const [currentDatabaseName, setCurrentDatabaseName] = useState<string>("");
     const [dbReady, setDbReady] = useState(false);
     const [defaultValue, setDefaultValue ] = useState<string>("select * from person limit 100;");
+    const [rowsAndCols, setRowsAndCols] = useState<any[]>();
+    const [resultVis, setResultVis] = useState<boolean>(false);
 
 
     const connectDatabase = async (name, sqliteBuffer) => {
@@ -67,7 +69,11 @@ function GlobalProvider({children}) {
         setCurrentDatabaseName, // allows user to change current database with select option
         getDatabaseNames,
         defaultValue,
-        setDefaultValue
+        setDefaultValue,
+        rowsAndCols,
+        setRowsAndCols,
+        resultVis,
+        setResultVis
     };
 
 
