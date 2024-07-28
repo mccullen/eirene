@@ -6,7 +6,6 @@ import { getColumns, getTableObjs, getTables } from "@/services/db";
 const GlobalContext = createContext<any>(null);
 
 function getUniqueKey(key, obj) {
-    debugger;
     let i = 2;
     if (key in obj) {
         key += `-${i}`;
@@ -20,11 +19,10 @@ function getUniqueKey(key, obj) {
 
 function GlobalProvider({children}) {
     const [databases, setDatabases] = useState<any>({});
-    const [currentDatabase, setCurrentDatabase] = useState<any>(null);
+    const [currentDatabaseName, setCurrentDatabaseName] = useState<string>("");
     const [dbReady, setDbReady] = useState(false);
 
     const connectDatabase = async (name, sqliteBuffer) => {
-        debugger;
         name = getUniqueKey(name, databases);
         if (!databases[name]) {
             const SQL = await initSqlJs({
@@ -35,7 +33,6 @@ function GlobalProvider({children}) {
                 }
             });
             const database = new SQL.Database(new Uint8Array(sqliteBuffer));
-            //const tables = getTables(database);
             const tables = getTableObjs(database);
             setDatabases((prevDatabases) => ({
                 ...prevDatabases,
@@ -45,19 +42,28 @@ function GlobalProvider({children}) {
                 }
             }));
         }
-        setCurrentDatabase(name);
+        setCurrentDatabaseName(name);
         setDbReady(true);
     };
     
     const getCurrentDatabase = () => {
-        return dbReady && currentDatabase ? databases[currentDatabase].database : null;
+        return dbReady && currentDatabaseName ? databases[currentDatabaseName].database : null;
     };
+
+    const getDatabaseNames = () => {
+        return Object.keys(databases);
+    }
 
     let val = {
         databases,
         connectDatabase,
         dbReady,
-        getCurrentDatabase
+        // Returns current database object that you can query
+        getCurrentDatabase,
+        // The unique name (key) of the current database object for querying
+        currentDatabaseName,
+        setCurrentDatabaseName, // allows user to change current database with select option
+        getDatabaseNames
     };
 
 

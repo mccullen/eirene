@@ -5,8 +5,10 @@ import { downloadDb } from "@/services/util";
 
 
 export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg }) {
-    const { getCurrentDatabase, dbReady } = useContext(GlobalContext);
+    const { getCurrentDatabase, dbReady, getDatabaseNames, getCurrentDatabaseName, currentDatabaseName, setCurrentDatabaseName } = useContext(GlobalContext);
     const [disabled, setDisabled] = useState<boolean>(true);
+
+    const names = getDatabaseNames();
 
     return (
       <div id="tool-bar" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex justify-between items-center">
@@ -38,12 +40,19 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
 
         {/* Right aligned */}
         <div className="flex space-x-4">
-            <button 
-                className="bg-green-500 hover:bg-green-700 px-4 py-2 rounded text-white font-bold"
-                onClick={() => downloadDb(getCurrentDatabase())}
+            <select
+                value={currentDatabaseName}
+                onChange={event => setCurrentDatabaseName(event.target.value)}
+                className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded ml-4"
             >
-                Download
-            </button>
+                {
+                    getDatabaseNames().map((name, i) => {
+                        return (
+                            <option key={`${name}-${i}`}>{name}</option>
+                        );
+                    })
+                }
+            </select>
             <select
                 value={dialect}
                 onChange={event => setDialect(event.target.value)}
@@ -52,6 +61,12 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
                 <option value="ohdsisql">OHDSI SQL</option>
                 <option value="sqlite">SQLite</option>
             </select>
+            <button 
+                className="bg-green-500 hover:bg-green-700 px-4 py-2 rounded text-white font-bold"
+                onClick={() => downloadDb(getCurrentDatabase(), currentDatabaseName)}
+            >
+                Download
+            </button>
         </div>
       </div>
     );

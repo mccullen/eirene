@@ -8,7 +8,6 @@ export default function ObjectExplorer() {
 
     function onNewConnectionClick(event) {
         const files = event.target.files;
-        debugger;
         if (files && files?.length > 0) {
             const file = files[0];
             // Replace everything after the last "." with nothing to get file name without extension
