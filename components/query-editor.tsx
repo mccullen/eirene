@@ -112,13 +112,6 @@ export default function QueryEditor(props) {
 
   return (
     <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
-      <Toolbar 
-        onExecute={onExecute} 
-        dialect={dialect} 
-        setDialect={setDialect} 
-        errorMsg={errorMsg}
-        successMsg={successMsg}
-      />
 
       <div id="split-wrapper">
         <Split
@@ -135,6 +128,13 @@ export default function QueryEditor(props) {
                 sizes={splitSizes} // You can set initial sizes here
             >
               <div id="top-pane">
+      <Toolbar 
+        onExecute={onExecute} 
+        dialect={dialect} 
+        setDialect={setDialect} 
+        errorMsg={errorMsg}
+        successMsg={successMsg}
+      />
                 <Editor 
                   height="100%"
                   width="100%"
@@ -146,7 +146,7 @@ export default function QueryEditor(props) {
                   beforeMount={beforeMount}
                 />
               </div>
-              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
+              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
                 { 
                   resultVis && (
                     <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
