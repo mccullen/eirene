@@ -44,7 +44,8 @@ export default function Shell({ children }: any) {
           }
         }
         init();
-      }, [connectDatabase]);
+    }, []);
+
     return (
         <>
           {/* Navbar goes here */}

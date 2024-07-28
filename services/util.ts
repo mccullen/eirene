@@ -40,7 +40,7 @@ export function round(input: number, nDecimalPlaces: number) {
   return Math.round(input * d) / d;
 }
 
-export function downloadDb(db) {
+export function downloadDb(db, filename) {
   // Export database to binary format
   const binaryArray = db.export();
 
@@ -50,7 +50,7 @@ export function downloadDb(db) {
   // Create a download link
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'database.sqlite'; // Specify the filename
+  link.download = `${filename}.sqlite`; // Specify the filename
 
   // Trigger the download
   link.click();

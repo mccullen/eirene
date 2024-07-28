@@ -8,24 +8,34 @@ import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
 import { getHighlightedText, getColsAndRows, round } from "@/services/util";
+import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    const { getCurrentDatabase } = useContext(GlobalContext);
-    const [dialect, setDialect] = useState('ohdsisql');
+    const { 
+      getCurrentDatabase, 
+      defaultValue, 
+      setDefaultValue, 
+      rowsAndCols, 
+      setRowsAndCols, 
+      resultVis, 
+      setResultVis, 
+      dialect, 
+      setDialect,
+      activeTab, 
+      setActiveTab,
+      splitSizes, 
+      setSplitSizes,
+      errorMsg,
+      setErrorMsg,
+      successMsg,
+      setSuccessMsg,
+      splitSizesHorizontal,
+      setSplitSizesHorizontal
+    } = useContext(GlobalContext);
+
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
-    let [errorMsg, setErrorMsg] = useState<string>("");
-    let [successMsg, setSuccessMsg] = useState<string>("");
-    let [resultVis, setResultVis] = useState<boolean>(false);
-    const [activeTab, setActiveTab] = useState(0);
-    let [rowsAndCols, setRowsAndCols] = useState<any[]>([
-    ]);
-    let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
-    let [columns, setColumns] = useState<any[]>([
-    ]);
-    let [data, setData] = useState<any[]>([
-    ]);
     let exec = useRef<any>(false);
 
     function beforeMount(monaco) {
@@ -37,8 +47,7 @@ export default function QueryEditor(props) {
     }
 
     function onChange(value, event) {
-        //console.log(value);
-        //console.log(event);
+      setDefaultValue(value);
     }
     
 
@@ -88,12 +97,6 @@ export default function QueryEditor(props) {
                 const rowCols = result.map(r => getColsAndRows(r));
                 setRowsAndCols(rowCols);
 
-                // Just take the last one for now
-                const r1: any = result[result.length-1];
-                const {cols, rows} = getColsAndRows(r1);
-
-                setColumns(cols);
-                setData(rows);
                 setActiveTab(0);
 
                 // Since there are results, we want to show them...
@@ -111,55 +114,70 @@ export default function QueryEditor(props) {
 
   return (
     <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
-      <Toolbar 
-        onExecute={onExecute} 
-        dialect={dialect} 
-        setDialect={setDialect} 
-        errorMsg={errorMsg}
-        successMsg={successMsg}
-      />
 
       <div id="split-wrapper">
         <Split
-            className="split"
-            direction="vertical"
+            className="split-horizontal"
             minSize={0}
-            sizes={splitSizes} // You can set initial sizes here
+            onDragEnd={(sizes) => {
+              setSplitSizesHorizontal(sizes);
+            }}
+            sizes={splitSizesHorizontal}
         >
-          <div id="top-pane">
-            <Editor 
-              height="100%"
-              width="100%"
-              theme="light"
-              defaultLanguage='sql'
-              defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
-              onChange={onChange}
-              onMount={onMount}
-              beforeMount={beforeMount}
-            />
-          </div>
-          <div id="bottom-pane" className="overflow-x-auto overflow-y-auto">
-            { 
-              resultVis && (
-                <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
-                  setActiveTab(i);
-                }} />
-              )
-            }
-            { 
-              resultVis && rowsAndCols.map((rc, i) => {
-                const {rows, cols} = rc;
-                return (
-                  <ResultTable 
-                    id={`result-table-${i}`}
-                    key={i}
-                    className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
-                    columns={cols} 
-                    data={rows} 
-                  />
-                )
-              })
-            }
+          <ObjectExplorer />
+          <div id="right-side-split">
+            <Split
+                className="split-vertical"
+                direction="vertical"
+                minSize={0}
+                onDragEnd={(sizes) => {
+                  setSplitSizes(sizes);
+                }}
+                sizes={splitSizes} 
+            >
+              <div id="top-pane">
+                <Toolbar 
+                  onExecute={onExecute} 
+                  dialect={dialect} 
+                  setDialect={setDialect} 
+                  errorMsg={errorMsg}
+                  successMsg={successMsg}
+                />
+                <Editor 
+                  height="100%"
+                  width="100%"
+                  theme="light"
+                  defaultLanguage='sql'
+                  defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
+                  onChange={onChange}
+                  onMount={onMount}
+                  beforeMount={beforeMount}
+                />
+              </div>
+              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
+                { 
+                  resultVis && (
+                    <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
+                      setActiveTab(i);
+                    }} />
+                  )
+                }
+                { 
+                  resultVis && rowsAndCols.map((rc, i) => {
+                    const {rows, cols} = rc;
+                    return (
+                      <ResultTable 
+                        id={`result-table-${i}`}
+                        key={i}
+                        className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
+                        columns={cols} 
+                        data={rows} 
+                      />
+                    )
+                  })
+                }
+              </div>
+            </Split>
           </div>
         </Split>
       </div>

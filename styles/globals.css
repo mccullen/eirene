@@ -16,7 +16,18 @@
     cursor: row-resize;
 }
 
-.split {
-    /* Fill screen, minus the height of the header */
-    height: calc(100vh - 140px);
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
 }
+
+.split-vertical {
+    /* Fill screen, minus the height of the header */
+    height: calc(100vh - 80px);
+}
+
+.split-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
