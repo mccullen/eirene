@@ -12,14 +12,30 @@ import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    let { getCurrentDatabase, defaultValue, setDefaultValue, rowsAndCols, setRowsAndCols, resultVis, setResultVis, dialect, setDialect } = useContext(GlobalContext);
+    const { 
+      getCurrentDatabase, 
+      defaultValue, 
+      setDefaultValue, 
+      rowsAndCols, 
+      setRowsAndCols, 
+      resultVis, 
+      setResultVis, 
+      dialect, 
+      setDialect,
+      activeTab, 
+      setActiveTab,
+      splitSizes, 
+      setSplitSizes,
+      errorMsg,
+      setErrorMsg,
+      successMsg,
+      setSuccessMsg,
+      splitSizesHorizontal,
+      setSplitSizesHorizontal
+    } = useContext(GlobalContext);
+
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
-    let [errorMsg, setErrorMsg] = useState<string>("");
-    let [successMsg, setSuccessMsg] = useState<string>("");
-    const [activeTab, setActiveTab] = useState(0);
-    let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
-
     let exec = useRef<any>(false);
 
     function beforeMount(monaco) {
@@ -103,7 +119,10 @@ export default function QueryEditor(props) {
         <Split
             className="split-horizontal"
             minSize={0}
-            sizes={[25, 75]} // You can set initial sizes here
+            onDragEnd={(sizes) => {
+              setSplitSizesHorizontal(sizes);
+            }}
+            sizes={splitSizesHorizontal}
         >
           <ObjectExplorer />
           <div id="right-side-split">
@@ -111,16 +130,19 @@ export default function QueryEditor(props) {
                 className="split-vertical"
                 direction="vertical"
                 minSize={0}
-                sizes={splitSizes} // You can set initial sizes here
+                onDragEnd={(sizes) => {
+                  setSplitSizes(sizes);
+                }}
+                sizes={splitSizes} 
             >
               <div id="top-pane">
-      <Toolbar 
-        onExecute={onExecute} 
-        dialect={dialect} 
-        setDialect={setDialect} 
-        errorMsg={errorMsg}
-        successMsg={successMsg}
-      />
+                <Toolbar 
+                  onExecute={onExecute} 
+                  dialect={dialect} 
+                  setDialect={setDialect} 
+                  errorMsg={errorMsg}
+                  successMsg={successMsg}
+                />
                 <Editor 
                   height="100%"
                   width="100%"

@@ -25,6 +25,11 @@ function GlobalProvider({children}) {
     const [rowsAndCols, setRowsAndCols] = useState<any[]>();
     const [resultVis, setResultVis] = useState<boolean>(false);
     const [dialect, setDialect] = useState('ohdsisql');
+    const [errorMsg, setErrorMsg] = useState<string>("");
+    const [successMsg, setSuccessMsg] = useState<string>("");
+    const [activeTab, setActiveTab] = useState(0);
+    const [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
+    const [splitSizesHorizontal, setSplitSizesHorizontal] = useState<number[]>([20, 80]);
 
 
     const connectDatabase = async (name, sqliteBuffer) => {
@@ -76,7 +81,17 @@ function GlobalProvider({children}) {
         resultVis,
         setResultVis,
         dialect,
-        setDialect
+        setDialect,
+        activeTab, 
+        setActiveTab,
+        splitSizes, 
+        setSplitSizes,
+        errorMsg,
+        setErrorMsg,
+        successMsg,
+        setSuccessMsg,
+        splitSizesHorizontal,
+        setSplitSizesHorizontal
     };
 
 
