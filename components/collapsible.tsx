@@ -14,7 +14,7 @@ const Collapsible = ({ items }) => {
       {items.map((item, index) => (
         <div key={index} className="">
           <div
-            className="flex items-start p-1 cursor-pointer space-x-1"
+            className="flex items-start cursor-pointer space-x-1"
             onClick={() => handleToggle(index)}
           >
             <div className={`transition-transform duration-300 ${itemOpen[index] ? 'rotate-90' : ''}`}>

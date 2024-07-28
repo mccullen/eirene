@@ -11,7 +11,12 @@ export default function ObjectExplorer() {
                 let content = dbObj.tables.map((t, i) => {
                     let tableContent = t.columns.map((c, i) => {
                         return (
-                            <div key={`col-${i}`}>{c.name}</div>
+                            <div 
+                                key={`col-${i}`}
+                                className=""
+                            >
+                                {c.name} ({c.type})
+                            </div>
                         );
                     });
                     debugger;
