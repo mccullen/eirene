@@ -45,7 +45,7 @@ function GlobalProvider({children}) {
 
     useEffect(() => {
         if (monaco && databases[currentDatabaseName]?.tables) {
-            registerAutocomplete(monaco, databases[currentDatabaseName]?.tables);
+            registerAutocomplete(monaco, databases?.[currentDatabaseName]?.tables);
         }
     }, [monaco, currentDatabaseName]);
 
