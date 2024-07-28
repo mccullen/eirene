@@ -12,20 +12,15 @@ import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    let { getCurrentDatabase, defaultValue, setDefaultValue, rowsAndCols, setRowsAndCols, resultVis, setResultVis } = useContext(GlobalContext);
-    const [dialect, setDialect] = useState('ohdsisql');
+    let { getCurrentDatabase, defaultValue, setDefaultValue, rowsAndCols, setRowsAndCols, resultVis, setResultVis, dialect, setDialect } = useContext(GlobalContext);
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
     let [errorMsg, setErrorMsg] = useState<string>("");
     let [successMsg, setSuccessMsg] = useState<string>("");
     const [activeTab, setActiveTab] = useState(0);
     let [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
-    let [columns, setColumns] = useState<any[]>([
-    ]);
-    let [data, setData] = useState<any[]>([
-    ]);
+
     let exec = useRef<any>(false);
-    debugger;
 
     function beforeMount(monaco) {
         monacoRef.current = monaco;
@@ -86,12 +81,6 @@ export default function QueryEditor(props) {
                 const rowCols = result.map(r => getColsAndRows(r));
                 setRowsAndCols(rowCols);
 
-                // Just take the last one for now
-                const r1: any = result[result.length-1];
-                const {cols, rows} = getColsAndRows(r1);
-
-                setColumns(cols);
-                setData(rows);
                 setActiveTab(0);
 
                 // Since there are results, we want to show them...

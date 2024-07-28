@@ -24,6 +24,7 @@ function GlobalProvider({children}) {
     const [defaultValue, setDefaultValue ] = useState<string>("select * from person limit 100;");
     const [rowsAndCols, setRowsAndCols] = useState<any[]>();
     const [resultVis, setResultVis] = useState<boolean>(false);
+    const [dialect, setDialect] = useState('ohdsisql');
 
 
     const connectDatabase = async (name, sqliteBuffer) => {
@@ -73,7 +74,9 @@ function GlobalProvider({children}) {
         rowsAndCols,
         setRowsAndCols,
         resultVis,
-        setResultVis
+        setResultVis,
+        dialect,
+        setDialect
     };
 
 
