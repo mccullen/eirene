@@ -65,7 +65,7 @@ export default function ObjectExplorer() {
 
                 // content is now an array of collapse, so wrap all that in a db-lv collapse
                 let item = { 
-                    title: <div className={`text-gray-700 font-bold`}>{dbName}{dbName === currentDatabaseName ? " *" : ""}</div>, 
+                    title: <div className={`${dbName === currentDatabaseName ? "text-green-500" : "text-gray-700"} font-bold`}>{dbName}{dbName === currentDatabaseName ? " *" : ""}</div>, 
                     content: <>{content}</>, 
                     open: false
                 }

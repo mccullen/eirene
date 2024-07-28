@@ -12,7 +12,7 @@ import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
-    const { getCurrentDatabase } = useContext(GlobalContext);
+    let { getCurrentDatabase, defaultValue, setDefaultValue } = useContext(GlobalContext);
     const [dialect, setDialect] = useState('ohdsisql');
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
@@ -38,8 +38,7 @@ export default function QueryEditor(props) {
     }
 
     function onChange(value, event) {
-        //console.log(value);
-        //console.log(event);
+      setDefaultValue(value);
     }
     
 
@@ -140,7 +139,7 @@ export default function QueryEditor(props) {
                   width="100%"
                   theme="light"
                   defaultLanguage='sql'
-                  defaultValue={props.defaultValue || "SELECT * FROM person LIMIT 100;"}
+                  defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
                   onChange={onChange}
                   onMount={onMount}
                   beforeMount={beforeMount}
