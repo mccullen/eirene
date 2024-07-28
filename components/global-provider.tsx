@@ -1,12 +1,13 @@
 "use client"
 import { createContext, useState } from "react";
 import initSqlJs from "sql.js";
+import { getColumns, getTableObjs, getTables } from "@/services/db";
 
 const GlobalContext = createContext<any>(null);
 
 function GlobalProvider({children}) {
-    const [databases, setDatabases] = useState({});
-    const [currentDatabase, setCurrentDatabase] = useState(null);
+    const [databases, setDatabases] = useState<any>({});
+    const [currentDatabase, setCurrentDatabase] = useState<any>(null);
     const [dbReady, setDbReady] = useState(false);
 
     const connectDatabase = async (name, sqliteBuffer) => {
@@ -19,9 +20,14 @@ function GlobalProvider({children}) {
                 }
             });
             const database = new SQL.Database(new Uint8Array(sqliteBuffer));
+            //const tables = getTables(database);
+            const tables = getTableObjs(database);
             setDatabases((prevDatabases) => ({
                 ...prevDatabases,
-                [name]: database,
+                [name]: {
+                    tables: tables,
+                    database: database
+                }
             }));
         }
         setCurrentDatabase(name);
@@ -29,7 +35,7 @@ function GlobalProvider({children}) {
     };
     
     const getCurrentDatabase = () => {
-        return dbReady && currentDatabase ? databases[currentDatabase] : null;
+        return dbReady && currentDatabase ? databases[currentDatabase].database : null;
     };
 
     let val = {

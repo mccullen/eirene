@@ -23,7 +23,7 @@ const Collapsible = ({ items }) => {
             <div className="text-lg font-semibold">{item.title}</div>
           </div>
           {itemOpen[index] && (
-            <div className="p-1">
+            <div className="p-1 ml-2">
               {item.content}
             </div>
           )}
