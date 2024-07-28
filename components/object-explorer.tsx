@@ -7,8 +7,16 @@ export default function ObjectExplorer() {
     return (
         <div id="obj-explorer">
             {Object.keys(databases).map(dbName => {
+                // Get all the info for this database
                 let dbObj = databases[dbName];
+
+                // Make a collapse for each database, containing all the tables
+                // The tables also need to have a collapse with all of the columns
+
+                // For each table, prepare a collapse with all the columns
                 let content = dbObj.tables.map((t, i) => {
+                    // Getting all the columns in a div.
+                    // The columns do not need anything to collapse
                     let tableContent = t.columns.map((c, i) => {
                         return (
                             <div 
@@ -19,24 +27,19 @@ export default function ObjectExplorer() {
                             </div>
                         );
                     });
-                    debugger;
 
+                    // Make the columns the content of the table level collapse
                     let tableItem = { title: t.name, content: <>{tableContent}</>, open: false };
                     let tableItems = [tableItem];
                     return (
                         <Collapsible key={`table-${i}`} items={tableItems} />
                     );
                 });
+
+                // content is now an array of collapse, so wrap all that in a db-lv collapse
                 let item = { title: dbName, content: <>{content}</>, open: false}
                 let items = [item];
 
-/*
-                const items = [
-                    { title: 'Section 1', content: <h1 className="bg-gray-500">Content for section 1</h1>, open: false },
-                    { title: 'Section 2', content: 'Content for section 2', open: false },
-                    { title: 'Section 3', content: 'Content for section 3', open: false },
-                  ];
-                  */
                 return ( 
                     <Collapsible key={dbName} items={items} />
                 );
