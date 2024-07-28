@@ -1,7 +1,9 @@
 "use client"
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import initSqlJs from "sql.js";
 import { getColumns, getTableObjs, getTables } from "@/services/db";
+import { Monaco, loader } from "@monaco-editor/react";
+import { createDependencyProposals, registerAutocomplete } from "@/services/util";
 
 const GlobalContext = createContext<any>(null);
 
@@ -30,10 +32,24 @@ function GlobalProvider({children}) {
     const [activeTab, setActiveTab] = useState(0);
     const [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
     const [splitSizesHorizontal, setSplitSizesHorizontal] = useState<number[]>([20, 80]);
+    const [monaco, setMonaco] = useState<Monaco|null>(null);
 
+    useEffect(() => {
+        const init = async () => {
+            const newMonaco = await loader.init();
+            setMonaco(newMonaco);
+           
+        };
+        init();
+    }, []);
+
+    useEffect(() => {
+        if (monaco && databases[currentDatabaseName]?.tables) {
+            registerAutocomplete(monaco, databases[currentDatabaseName]?.tables);
+        }
+    }, [monaco, currentDatabaseName]);
 
     const connectDatabase = async (name, sqliteBuffer) => {
-        debugger;
         name = getUniqueKey(name, databases);
         if (!databases[name]) {
             const SQL = await initSqlJs({
