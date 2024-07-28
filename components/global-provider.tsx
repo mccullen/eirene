@@ -59,8 +59,9 @@ function GlobalProvider({children}) {
 
     const removeDatabase = (name) => {
         const {[name]: _, ...newDatabases } = databases;
-        setDatabases(newDatabases)
+        setDatabases(newDatabases);
         if (name === currentDatabaseName) {
+            // If you removed currently selected db, just connect to the first db in the list
             let names  = getDatabaseNames();
             if (names && names.length > 0) {
                 setCurrentDatabaseName(names[0]);
