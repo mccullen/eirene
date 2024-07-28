@@ -33,6 +33,7 @@ function GlobalProvider({children}) {
 
 
     const connectDatabase = async (name, sqliteBuffer) => {
+        debugger;
         name = getUniqueKey(name, databases);
         if (!databases[name]) {
             const SQL = await initSqlJs({
@@ -54,6 +55,17 @@ function GlobalProvider({children}) {
         }
         setCurrentDatabaseName(name);
         setDbReady(true);
+    };
+
+    const removeDatabase = (name) => {
+        const {[name]: _, ...newDatabases } = databases;
+        setDatabases(newDatabases)
+        if (name === currentDatabaseName) {
+            let names  = getDatabaseNames();
+            if (names && names.length > 0) {
+                setCurrentDatabaseName(names[0]);
+            }
+        }
     };
     
     const getCurrentDatabase = () => {
@@ -91,7 +103,8 @@ function GlobalProvider({children}) {
         successMsg,
         setSuccessMsg,
         splitSizesHorizontal,
-        setSplitSizesHorizontal
+        setSplitSizesHorizontal,
+        removeDatabase,
     };
 
 

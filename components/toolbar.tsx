@@ -39,7 +39,7 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
         </div>
 
         {/* Right aligned */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
             <select
                 value={currentDatabaseName}
                 onChange={event => setCurrentDatabaseName(event.target.value)}
