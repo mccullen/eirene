@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import initSqlJs from "sql.js";
 import { getColumns, getTableObjs, getTables } from "@/services/db";
 import { Monaco, loader } from "@monaco-editor/react";
-import { createDependencyProposals, registerAutocomplete } from "@/services/util";
+import { registerAutocomplete } from "@/services/util";
 
 const GlobalContext = createContext<any>(null);
 
@@ -23,7 +23,10 @@ function GlobalProvider({children}) {
     const [databases, setDatabases] = useState<any>({});
     const [currentDatabaseName, setCurrentDatabaseName] = useState<string>("");
     const [dbReady, setDbReady] = useState(false);
-    const [defaultValue, setDefaultValue ] = useState<string>("select * from person limit 100;");
+    const [defaultValue, setDefaultValue ] = useState<string>(`select *
+from person p
+inner join condition_occurrence co on p.
+where p.person_id = 0;`);
     const [rowsAndCols, setRowsAndCols] = useState<any[]>();
     const [resultVis, setResultVis] = useState<boolean>(false);
     const [dialect, setDialect] = useState('ohdsisql');
@@ -33,19 +36,21 @@ function GlobalProvider({children}) {
     const [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
     const [splitSizesHorizontal, setSplitSizesHorizontal] = useState<number[]>([20, 80]);
     const [monaco, setMonaco] = useState<Monaco|null>(null);
+    const [autocompleteDispose, setAutoCompleteDispose] = useState<any>(null);
 
     useEffect(() => {
         const init = async () => {
             const newMonaco = await loader.init();
             setMonaco(newMonaco);
-           
         };
         init();
     }, []);
 
     useEffect(() => {
         if (monaco && databases[currentDatabaseName]?.tables) {
-            registerAutocomplete(monaco, databases?.[currentDatabaseName]?.tables);
+            autocompleteDispose?.dispose();
+            const newAutoCompleteDispose = registerAutocomplete(monaco, databases?.[currentDatabaseName]?.tables);
+            setAutoCompleteDispose(newAutoCompleteDispose);
         }
     }, [monaco, currentDatabaseName]);
 

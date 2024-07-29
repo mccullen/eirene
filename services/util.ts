@@ -94,6 +94,7 @@ export function createDependencyProposals(monaco: Monaco, range, tables) {
     ]; 
 }*/
 export function registerAutocomplete(monaco: Monaco, tables: any[]) {
+    debugger;
     if (!monaco) {
         console.error("Monaco is not initialized.");
         return;
@@ -103,29 +104,31 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
     function getTableAliases(text: string): Record<string, string> {
         const aliases: Record<string, string> = {};
         // Example regex pattern for SQL table aliases
-        const aliasPattern = /(\bFROM\b|\bJOIN\b)\s+(\w+)\s+(\w+)/g;
+        const aliasPattern = /(\bFROM\b|\bJOIN\b)\s+(\w+)\s+(\w+)/gi;
         let match;
         while ((match = aliasPattern.exec(text)) !== null) {
-            aliases[match[3]] = match[2]; // alias -> tableName
+            aliases[match[2]] = match[3]; // table -> alias
         }
         return aliases;
     }
 
     // Function to create completion items from table and column data
-    function createCompletionItems(range, currentTableName: string | null) {
+    function createCompletionItems(range, currentTableName: string | null, alias: string | null) {
         const items: any = [];
 
         // Find the current table based on alias or full table name
         const table = tables.find(t => t.name === currentTableName);
+        //const table: any = currentTableName;
 
         if (table) {
             // Add column names as completion items for the current table
+            debugger;
             table.columns.forEach(column => {
                 items.push({
-                    label: `${table.name}.${column.name}`,
+                    label: `${alias || table.name}.${column.name}`,
                     kind: monaco.languages.CompletionItemKind.Field,
                     documentation: `Column: ${column.name} in table ${table.name}`,
-                    insertText: `${table.name}.${column.name}`,
+                    insertText: `${alias || table.name}.${column.name}`,
                     range: range,
                 });
             });
@@ -145,7 +148,7 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
         return items;
     }
 
-    monaco.languages.registerCompletionItemProvider('sql', {
+    const dispose = monaco.languages.registerCompletionItemProvider('sql', {
         provideCompletionItems: function (model, position) {
             const textUntilPosition = model.getValueInRange({
                 startLineNumber: 1,
@@ -153,6 +156,7 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
                 endLineNumber: position.lineNumber,
                 endColumn: position.column,
             });
+            console.log(textUntilPosition);
 
             const word = model.getWordUntilPosition(position);
             const range = {
@@ -163,16 +167,20 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
             };
 
             // Get table aliases from the current text
-            const aliases = getTableAliases(textUntilPosition);
+            const tableToAlias = getTableAliases(textUntilPosition);
+            console.log(tableToAlias);
 
             // Determine current table context based on the cursor position
-            const currentTableName = Object.values(aliases).find(alias =>
-                textUntilPosition.includes(alias)
-            ) || null;
+
+            const [currentTableName, currentAlias]: any = Object.entries(tableToAlias).findLast(([table, alias]) => {
+                let result = textUntilPosition.includes(table);
+                return result;
+            }) || [null, null];
 
             return {
-                suggestions: createCompletionItems(range, currentTableName),
+                suggestions: createCompletionItems(range, currentTableName, currentAlias),
             };
         },
     });
+    return dispose;
 }
