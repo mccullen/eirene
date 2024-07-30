@@ -56,48 +56,11 @@ export function downloadDb(db, filename) {
     link.click();
 }
 
-/*
-export function createDependencyProposals(monaco: Monaco, range, tables) {
-    // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
-    // here you could do a server side lookup
-    return [
-        {
-            label: '"lodash"',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "The Lodash library exported as Node.js modules.",
-            insertText: '"lodash": "*"',
-            range: range,
-        },
-        {
-            label: '"express"',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Fast, unopinionated, minimalist web framework",
-            insertText: '"express": "*"',
-            range: range,
-        },
-        {
-            label: '"mkdirp"',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Recursively mkdir, like <code>mkdir -p</code>",
-            insertText: '"mkdirp": "*"',
-            range: range,
-        },
-        {
-            label: '"my-third-party-library"',
-            kind: monaco.languages.CompletionItemKind.Function,
-            documentation: "Describe your library here",
-            insertText: '"${1:my-third-party-library}": "${2:1.2.3}"',
-            insertTextRules:
-                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range,
-        },
-    ]; 
-}*/
 // Function to extract table aliases and their corresponding tables from the SQL query
 function getTableAliases(text: string): Record<string, string> {
     const aliases: Record<string, string> = {};
     // Example regex pattern for SQL table aliases
-    const aliasPattern = /(\bFROM\b|\bJOIN\b)\s+(\w+)\s+(\w+)/gi;
+    const aliasPattern = /(\bFRoM\b|\bJOIN\b)\s+(\w+)(?:\s+as)?\s+(\w+)/gi;
     let match;
     while ((match = aliasPattern.exec(text)) !== null) {
         aliases[match[3]] = match[2]; // alias -> table
@@ -122,7 +85,6 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
                 endLineNumber: position.lineNumber,
                 endColumn: position.column,
             });
-            console.log(textUntilPosition);
 
             const word = model.getWordUntilPosition(position);
             const range = {
@@ -132,18 +94,19 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
                 endColumn: word.endColumn,
             };
 
-            //let colMatch = /(\w+)\.(\w*)/gi.exec(word.word);
             let colMatch;
             let match;
+
+            // Pattern to match {table}.{column}, used to determine if position should suggest cols or tables
             const pattern =/(\w+)\.(\w*)/gi ;
             while(match = pattern.exec(textUntilPosition)) {
                 colMatch = match;
             }
             if (colMatch && textUntilPosition.slice(-colMatch[0].length) === `${colMatch[0]}`) {
+                // The last column match was at the current position.
                 // Suggest columns based on alias
                 const alias = colMatch[1];
                 const colSoFar = colMatch[2];
-                console.log("colmatch!");
                 // Get table aliases from the current text
                 const aliasToTable = getTableAliases(textUntilPosition);
                 const currentTableName = aliasToTable[alias];
@@ -153,10 +116,8 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
                         label: `${column.name}`,
                         kind: monaco.languages.CompletionItemKind.Field,
                         documentation: `Column: ${column.name} in table ${table.name}`,
-                        //insertText: `${alias || table.name}.${column.name}`,
                         insertText: `${column.name}`,
                         range: range,
-                        //commitCharacters: ["\t"]
                     });
                 });
             } else {

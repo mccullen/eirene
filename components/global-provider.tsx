@@ -7,6 +7,8 @@ import { registerAutocomplete } from "@/services/util";
 
 const GlobalContext = createContext<any>(null);
 
+
+// Used to get a unique database name in the object explorer
 function getUniqueKey(key, obj) {
     let i = 2;
     if (key in obj) {
@@ -23,10 +25,7 @@ function GlobalProvider({children}) {
     const [databases, setDatabases] = useState<any>({});
     const [currentDatabaseName, setCurrentDatabaseName] = useState<string>("");
     const [dbReady, setDbReady] = useState(false);
-    const [defaultValue, setDefaultValue ] = useState<string>(`select *
-from person p
-inner join condition_occurrence co on p.
-where p.person_id = 0;`);
+    const [defaultValue, setDefaultValue ] = useState<string>(`select * from person limit 100;`);
     const [rowsAndCols, setRowsAndCols] = useState<any[]>();
     const [resultVis, setResultVis] = useState<boolean>(false);
     const [dialect, setDialect] = useState('ohdsisql');
@@ -43,13 +42,23 @@ where p.person_id = 0;`);
             const newMonaco = await loader.init();
             setMonaco(newMonaco);
         };
+        // Get the monaco editor instance, mainly for registering autocomplete
         init();
     }, []);
 
     useEffect(() => {
+        // When the current database changes, we need to re-register autocomplete per the tables/cols in
+        // the current database
         if (monaco && databases[currentDatabaseName]?.tables) {
+            // Monaco initialized and current database present
+
+            // Dispose old autocomplete from previous connection
             autocompleteDispose?.dispose();
+
+            // Register new autocomplete based on new database tables/columns
             const newAutoCompleteDispose = registerAutocomplete(monaco, databases?.[currentDatabaseName]?.tables);
+
+            // Persist the dispose so you can dispose the autocomplete when you load another DB
             setAutoCompleteDispose(newAutoCompleteDispose);
         }
     }, [monaco, currentDatabaseName]);
@@ -66,6 +75,7 @@ where p.person_id = 0;`);
             });
             const database = new SQL.Database(new Uint8Array(sqliteBuffer));
             const tables = getTableObjs(database);
+            // Add new database to the current databases
             setDatabases((prevDatabases) => ({
                 ...prevDatabases,
                 [name]: {
@@ -79,8 +89,10 @@ where p.person_id = 0;`);
     };
 
     const removeDatabase = (name) => {
+        // Remove the selected database
         const {[name]: _, ...newDatabases } = databases;
         setDatabases(newDatabases);
+
         if (name === currentDatabaseName) {
             // If you removed currently selected db, just connect to the first db in the list
             let names  = getDatabaseNames();
