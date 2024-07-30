@@ -7,7 +7,7 @@ import { sendGTMEvent } from '@next/third-parties/google'
 import Split from 'react-split'
 import Toolbar from "./toolbar";
 import { translate, TranslateBody } from "@/services/web-api";
-import { getHighlightedText, getColsAndRows, round, createDependencyProposals } from "@/services/util";
+import { getHighlightedText, getColsAndRows, round } from "@/services/util";
 import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
 
