@@ -102,13 +102,12 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
             while(match = pattern.exec(textUntilPosition)) {
                 colMatch = match;
             }
-            console.log(textUntilPosition);
             if (colMatch && textUntilPosition.slice(-colMatch[0].length) === `${colMatch[0]}`) {
                 // The last column match was at the current position.
                 // Suggest columns based on alias
                 const alias = colMatch[1];
                 const colSoFar = colMatch[2];
-                // Get table aliases from the current text
+                // Get table aliases from the current text, using the full text in case you are in SELECT clause
                 const aliasToTable = getTableAliases(model.getValue());
                 const currentTableName = aliasToTable[alias];
                 const table = tables.find(t => t.name === currentTableName);
