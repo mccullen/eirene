@@ -4,7 +4,7 @@ import Collapsible from "./collapsible";
 import FileButton from "./file-button";
 
 export default function ObjectExplorer() {
-    const { databases, connectDatabase, currentDatabaseName, removeDatabase } = useContext(GlobalContext);
+    const { databases, connectDatabase, currentDatabaseName, removeDatabase, setCurrentDatabaseName } = useContext(GlobalContext);
 
     function onNewConnectionClick(event) {
         const files = event.target.files;
@@ -68,7 +68,18 @@ export default function ObjectExplorer() {
 
                 const title = 
                     <div className={`${dbName === currentDatabaseName ? "text-green-500" : "text-gray-700"} group font-bold`}>{dbName}{dbName === currentDatabaseName ? " *" : ""} 
-                        <button className="absolute opacity-0 group-hover:opacity-50 pl-2 transition-opacity duration-300 text-gray-500 hover:text-red-500 focus:outline-none" onClick={(event) => { removeDatabase(dbName)}}>❌</button>
+                        <button className="relative opacity-0 group-hover:opacity-50 pl-2 transition-opacity duration-300 text-gray-500 hover:text-red-500 focus:outline-none"
+                            onClick={(event) => { 
+                                event.stopPropagation();
+                                setCurrentDatabaseName(dbName)
+                            }
+                        }>✅</button>
+                        <button className="relative left-0 opacity-0 group-hover:opacity-50 pl-0 transition-opacity duration-300 text-gray-500 hover:text-red-500 focus:outline-none"
+                            onClick={(event) => { 
+                                event.stopPropagation(); 
+                                removeDatabase(dbName)
+                            }
+                        }>❌</button>
                     </div>;
                 // content is now an array of collapse, so wrap all that in a db-lv collapse
                 let item = { 
