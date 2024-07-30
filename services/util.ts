@@ -60,7 +60,7 @@ export function downloadDb(db, filename) {
 function getTableAliases(text: string): Record<string, string> {
     const aliases: Record<string, string> = {};
     // Example regex pattern for SQL table aliases
-    const aliasPattern = /(\bFRoM\b|\bJOIN\b)\s+(\w+)(?:\s+as)?\s+(\w+)/gi;
+    const aliasPattern = /(\bFROM\b|\bJOIN\b)\s+(\w+)(?:\s+as)?\s+(\w+)/gi;
     let match;
     while ((match = aliasPattern.exec(text)) !== null) {
         aliases[match[3]] = match[2]; // alias -> table
