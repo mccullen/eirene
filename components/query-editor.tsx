@@ -44,6 +44,21 @@ export default function QueryEditor(props) {
 
     function onMount(editor, monaco) {
         editorRef.current = editor;
+
+        /*
+        // Default makes pressing enter do autocomplete, which is really annoying IMO
+        editor.onKeyDown((e) => {
+          if (e.keyCode === monaco.KeyCode.Enter) {
+            e.preventDefault(); // Prevent autocomplete acceptance
+            
+            // Insert a new line at the current cursor position
+            editor.executeEdits('', [{
+              range: editor.getSelection(),
+              text: '\n'
+            }]);
+          }
+        });
+        */
     }
 
     function onChange(value, event) {

@@ -150,13 +150,13 @@ export function registerAutocomplete(monaco: Monaco, tables: any[]) {
                 const table = tables.find(t => t.name === currentTableName);
                 table?.columns?.forEach(column => {
                     items.push({
-                        label: `${alias || table.name}.${column.name}`,
+                        label: `${column.name}`,
                         kind: monaco.languages.CompletionItemKind.Field,
                         documentation: `Column: ${column.name} in table ${table.name}`,
                         //insertText: `${alias || table.name}.${column.name}`,
                         insertText: `${column.name}`,
                         range: range,
-                        commitCharacters: ["\t"]
+                        //commitCharacters: ["\t"]
                     });
                 });
             } else {
