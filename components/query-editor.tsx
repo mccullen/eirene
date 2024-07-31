@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
+import { initVimMode } from 'monaco-vim';
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './global-provider';
 import ResultTable from './result-table';
@@ -57,6 +58,8 @@ export default function QueryEditor(props) {
             }]);
           }
         });
+
+        //const vimMode = initVimMode(editor, document.getElementById("vim"));
     }
 
     function onChange(value, event) {
@@ -148,7 +151,7 @@ export default function QueryEditor(props) {
                 }}
                 sizes={splitSizes} 
             >
-              <div id="top-pane">
+              <div id="top-pane" className="flex flex-col overflow-auto">
                 <Toolbar 
                     onExecute={onExecute} 
                     dialect={dialect} 
@@ -165,9 +168,11 @@ export default function QueryEditor(props) {
                     onChange={onChange}
                     onMount={onMount}
                     beforeMount={beforeMount}
+                    options={{minimap: {enabled: false}}}
                 />
               </div>
               <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
+                <div id="vim"></div>
                 { 
                   resultVis && (
                     <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
