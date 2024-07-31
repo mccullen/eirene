@@ -45,7 +45,6 @@ export default function QueryEditor(props) {
     function onMount(editor, monaco) {
         editorRef.current = editor;
 
-        /*
         // Default makes pressing enter do autocomplete, which is really annoying IMO
         editor.onKeyDown((e) => {
           if (e.keyCode === monaco.KeyCode.Enter) {
@@ -58,7 +57,6 @@ export default function QueryEditor(props) {
             }]);
           }
         });
-        */
     }
 
     function onChange(value, event) {
