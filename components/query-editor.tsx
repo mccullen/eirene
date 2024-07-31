@@ -197,7 +197,12 @@ export default function QueryEditor(props) {
                     onChange={onChange}
                     onMount={onMount}
                     beforeMount={beforeMount}
-                    options={{minimap: {enabled: false}}}
+                    options={
+                        {
+                            minimap: {enabled: false},
+                            acceptSuggestionOnEnter: "off"
+                        }
+                    }
                 />
               </div>
               <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
