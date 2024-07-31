@@ -13,25 +13,25 @@ import Tabs from "./tabs";
 
 export default function QueryEditor(props) {
     const { 
-      getCurrentDatabase, 
-      defaultValue, 
-      setDefaultValue, 
-      rowsAndCols, 
-      setRowsAndCols, 
-      resultVis, 
-      setResultVis, 
-      dialect, 
-      setDialect,
-      activeTab, 
-      setActiveTab,
-      splitSizes, 
-      setSplitSizes,
-      errorMsg,
-      setErrorMsg,
-      successMsg,
-      setSuccessMsg,
-      splitSizesHorizontal,
-      setSplitSizesHorizontal
+        getCurrentDatabase, 
+        defaultValue, 
+        setDefaultValue, 
+        rowsAndCols, 
+        setRowsAndCols, 
+        resultVis, 
+        setResultVis, 
+        dialect, 
+        setDialect,
+        activeTab, 
+        setActiveTab,
+        splitSizes, 
+        setSplitSizes,
+        errorMsg,
+        setErrorMsg,
+        successMsg,
+        setSuccessMsg,
+        splitSizesHorizontal,
+        setSplitSizesHorizontal
     } = useContext(GlobalContext);
 
     let editorRef = useRef<any>(null);
@@ -44,10 +44,23 @@ export default function QueryEditor(props) {
 
     function onMount(editor, monaco) {
         editorRef.current = editor;
+
+        // Default makes pressing enter do autocomplete, which is really annoying IMO
+        editor.onKeyDown((e) => {
+          if (e.keyCode === monaco.KeyCode.Enter) {
+            e.preventDefault(); // Prevent autocomplete acceptance
+            
+            // Insert a new line at the current cursor position
+            editor.executeEdits('', [{
+              range: editor.getSelection(),
+              text: '\n'
+            }]);
+          }
+        });
     }
 
     function onChange(value, event) {
-      setDefaultValue(value);
+        setDefaultValue(value);
     }
     
 
@@ -131,34 +144,34 @@ export default function QueryEditor(props) {
                 direction="vertical"
                 minSize={0}
                 onDragEnd={(sizes) => {
-                  setSplitSizes(sizes);
+                    setSplitSizes(sizes);
                 }}
                 sizes={splitSizes} 
             >
               <div id="top-pane">
                 <Toolbar 
-                  onExecute={onExecute} 
-                  dialect={dialect} 
-                  setDialect={setDialect} 
-                  errorMsg={errorMsg}
-                  successMsg={successMsg}
+                    onExecute={onExecute} 
+                    dialect={dialect} 
+                    setDialect={setDialect} 
+                    errorMsg={errorMsg}
+                    successMsg={successMsg}
                 />
                 <Editor 
-                  height="100%"
-                  width="100%"
-                  theme="light"
-                  defaultLanguage='sql'
-                  defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
-                  onChange={onChange}
-                  onMount={onMount}
-                  beforeMount={beforeMount}
+                    height="100%"
+                    width="100%"
+                    theme="light"
+                    defaultLanguage='sql'
+                    defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
+                    onChange={onChange}
+                    onMount={onMount}
+                    beforeMount={beforeMount}
                 />
               </div>
               <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
                 { 
                   resultVis && (
                     <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
-                      setActiveTab(i);
+                        setActiveTab(i);
                     }} />
                   )
                 }
