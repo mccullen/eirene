@@ -49,7 +49,7 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
 
         {/* Right aligned */}
         <div className="flex space-x-4 items-center">
-            <label>
+            <label title="vi > emacs">
                 <input id="vi-checkbox" type="checkbox" name="vi" checked={vi} onChange={event => {
                     console.log(vi);
                     debugger;
