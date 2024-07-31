@@ -157,12 +157,13 @@ export default function QueryEditor(props) {
                                     options={
                                         {
                                             minimap: {enabled: false},
-                                            acceptSuggestionOnEnter: "off"
+                                            acceptSuggestionOnEnter: "off",
+                                            //cursorStyle: "block"
                                         }
                                     }
                                 />
                                 </div>
-                                <div id="vim" className="border-2 border-red-500">test</div>
+                                <div id="vim" className="border-2 border-red-500"></div>
                             </div>
                             <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
                                 { 

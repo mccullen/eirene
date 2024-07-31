@@ -5,7 +5,16 @@ import { downloadDb } from "@/services/util";
 
 
 export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg }) {
-    const { getCurrentDatabase, dbReady, getDatabaseNames, getCurrentDatabaseName, currentDatabaseName, setCurrentDatabaseName } = useContext(GlobalContext);
+    const { 
+        getCurrentDatabase, 
+        dbReady, 
+        getDatabaseNames, 
+        getCurrentDatabaseName, 
+        currentDatabaseName, 
+        setCurrentDatabaseName, 
+        vi, 
+        setVi 
+    } = useContext(GlobalContext);
     const [disabled, setDisabled] = useState<boolean>(true);
 
     const names = getDatabaseNames();
@@ -40,6 +49,12 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
 
         {/* Right aligned */}
         <div className="flex space-x-4 items-center">
+            <label>
+                <input id="vi-checkbox" type="checkbox" name="vi" checked={vi} onChange={event => {
+                    console.log(vi);
+                    debugger;
+                }} /><span className="ml-2">Vi</span>
+            </label>
             <select
                 value={currentDatabaseName}
                 onChange={event => setCurrentDatabaseName(event.target.value)}
