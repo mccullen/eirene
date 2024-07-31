@@ -45,41 +45,10 @@ export default function QueryEditor(props) {
 
     function onMount(editor, monaco) {
         editorRef.current = editor;
-
-        // Default makes pressing enter do autocomplete, which is really annoying IMO
-        /*
-        editor.onKeyDown((e) => {
-          if (e.keyCode === monaco.KeyCode.Enter) {
-            e.preventDefault(); // Prevent autocomplete acceptance
-            
-            // Insert a new line at the current cursor position
-            editor.executeEdits('', [{
-              range: editor.getSelection(),
-              text: '\n'
-            }]);
-          }
-        });
-        */
-
-        //const vimMode = initVimMode(editor, document.getElementById("vim"));
+        const vimMode = initVimMode(editor, document.getElementById("vim"));
     }
 
     function onChange(value, event) {
-        /*
-        setDefaultValue(value);
-        console.log(value);
-        const editor = editorRef.current;
-        if (editor) {
-            const model = editor.getModel();
-            const lastLine = model.getLineCount();
-            const cursorPosition = editor.getPosition();
-
-            // Check if the current line is the last line
-            if (cursorPosition.lineNumber === lastLine) {
-                editor.revealLineInCenter(lastLine); // Scroll to the bottom
-            }
-        }
-            */
     }
     
 
@@ -144,96 +113,84 @@ export default function QueryEditor(props) {
         }
     }
 
-  return (
-    <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
-        {/*
-                <Editor 
-                    className="z-20"
-                    height="200px"
-                    width="500px"
-                    theme="light"
-                    defaultLanguage='sql'
-                    defaultValue={"test"}
-                    onMount={onMount}
-                    beforeMount={beforeMount}
-                    options={{minimap: {enabled: false}}}
-                />
-                */}
-
-      <div id="split-wrapper">
-        <Split
-            className="split-horizontal"
-            minSize={0}
-            onDragEnd={(sizes) => {
-              setSplitSizesHorizontal(sizes);
-            }}
-            sizes={splitSizesHorizontal}
-        >
-          <ObjectExplorer />
-          <div id="right-side-split">
-            <Split
-                className="split-vertical"
-                direction="vertical"
-                minSize={0}
-                onDragEnd={(sizes) => {
-                    setSplitSizes(sizes);
-                }}
-                sizes={splitSizes} 
-            >
-              <div id="top-pane" className="relative flex flex-col overflow-hidden">
-                <Toolbar 
-                    onExecute={onExecute} 
-                    dialect={dialect} 
-                    setDialect={setDialect} 
-                    errorMsg={errorMsg}
-                    successMsg={successMsg}
-                />
-                <Editor
-                    className=""
-                    height="100%"
-                    width="100%"
-                    theme="light"
-                    defaultLanguage='sql'
-                    defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
-                    onChange={onChange}
-                    onMount={onMount}
-                    beforeMount={beforeMount}
-                    options={
-                        {
-                            minimap: {enabled: false},
-                            acceptSuggestionOnEnter: "off"
-                        }
-                    }
-                />
-              </div>
-              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
-                <div id="vim"></div>
-                { 
-                  resultVis && (
-                    <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
-                        setActiveTab(i);
-                    }} />
-                  )
-                }
-                { 
-                  resultVis && rowsAndCols.map((rc, i) => {
-                    const {rows, cols} = rc;
-                    return (
-                      <ResultTable 
-                        id={`result-table-${i}`}
-                        key={i}
-                        className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
-                        columns={cols} 
-                        data={rows} 
-                      />
-                    )
-                  })
-                }
-              </div>
-            </Split>
-          </div>
-        </Split>
-      </div>
-    </div>
-  );
+    return (
+        <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
+            <div id="split-wrapper">
+                <Split
+                    className="split-horizontal"
+                    minSize={0}
+                    onDragEnd={(sizes) => {
+                        setSplitSizesHorizontal(sizes);
+                    }}
+                    sizes={splitSizesHorizontal}
+                >
+                    <ObjectExplorer />
+                    <div id="right-side-split">
+                        <Split
+                            className="split-vertical"
+                            direction="vertical"
+                            minSize={0}
+                            onDragEnd={(sizes) => {
+                                setSplitSizes(sizes);
+                            }}
+                            sizes={splitSizes} 
+                        >
+                            <div id="top-pane" className="flex flex-col h-full">
+                                <Toolbar 
+                                    onExecute={onExecute} 
+                                    dialect={dialect} 
+                                    setDialect={setDialect} 
+                                    errorMsg={errorMsg}
+                                    successMsg={successMsg}
+                                />
+                                <div id="editor-wrapper" className="flex-1 relative">
+                                <Editor
+                                    className="border-2 border-blue-500 absolute inset-0"
+                                    height="100%"
+                                    width="100%"
+                                    theme="light"
+                                    defaultLanguage='sql'
+                                    defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
+                                    onChange={onChange}
+                                    onMount={onMount}
+                                    beforeMount={beforeMount}
+                                    options={
+                                        {
+                                            minimap: {enabled: false},
+                                            acceptSuggestionOnEnter: "off"
+                                        }
+                                    }
+                                />
+                                </div>
+                                <div id="vim" className="border-2 border-red-500">test</div>
+                            </div>
+                            <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
+                                { 
+                                    resultVis && (
+                                        <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
+                                            setActiveTab(i);
+                                        }} />
+                                    )
+                                    }
+                                { 
+                                    resultVis && rowsAndCols.map((rc, i) => {
+                                        const {rows, cols} = rc;
+                                        return (
+                                            <ResultTable 
+                                                id={`result-table-${i}`}
+                                                key={i}
+                                                className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
+                                                columns={cols} 
+                                                data={rows} 
+                                            />
+                                        )
+                                    })
+                                }
+                            </div>
+                        </Split>
+                    </div>
+                </Split>
+            </div>
+        </div>
+    );
 }
