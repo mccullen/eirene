@@ -47,6 +47,7 @@ export default function QueryEditor(props) {
         editorRef.current = editor;
 
         // Default makes pressing enter do autocomplete, which is really annoying IMO
+        /*
         editor.onKeyDown((e) => {
           if (e.keyCode === monaco.KeyCode.Enter) {
             e.preventDefault(); // Prevent autocomplete acceptance
@@ -58,12 +59,27 @@ export default function QueryEditor(props) {
             }]);
           }
         });
+        */
 
         //const vimMode = initVimMode(editor, document.getElementById("vim"));
     }
 
     function onChange(value, event) {
+        /*
         setDefaultValue(value);
+        console.log(value);
+        const editor = editorRef.current;
+        if (editor) {
+            const model = editor.getModel();
+            const lastLine = model.getLineCount();
+            const cursorPosition = editor.getPosition();
+
+            // Check if the current line is the last line
+            if (cursorPosition.lineNumber === lastLine) {
+                editor.revealLineInCenter(lastLine); // Scroll to the bottom
+            }
+        }
+            */
     }
     
 
@@ -130,6 +146,19 @@ export default function QueryEditor(props) {
 
   return (
     <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
+        {/*
+                <Editor 
+                    className="z-20"
+                    height="200px"
+                    width="500px"
+                    theme="light"
+                    defaultLanguage='sql'
+                    defaultValue={"test"}
+                    onMount={onMount}
+                    beforeMount={beforeMount}
+                    options={{minimap: {enabled: false}}}
+                />
+                */}
 
       <div id="split-wrapper">
         <Split
