@@ -180,7 +180,7 @@ export default function QueryEditor(props) {
                 }}
                 sizes={splitSizes} 
             >
-              <div id="top-pane" className="flex flex-col overflow-auto">
+              <div id="top-pane" className="flex flex-col">
                 <Toolbar 
                     onExecute={onExecute} 
                     dialect={dialect} 
