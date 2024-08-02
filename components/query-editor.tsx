@@ -37,15 +37,21 @@ export default function QueryEditor(props) {
 
     let editorRef = useRef<any>(null);
     let monacoRef = useRef(null);
+    let vimRef = useRef<any>(null);
     let exec = useRef<any>(false);
+    useEffect(() => {
+        console.log("useEffect");
+        console.log(editorRef.current);
+    }, []);
 
     function beforeMount(monaco) {
         monacoRef.current = monaco;
     }
 
     function onMount(editor, monaco) {
+        console.log("mounted");
         editorRef.current = editor;
-        const vimMode = initVimMode(editor, document.getElementById("vim"));
+        //const vimMode = initVimMode(editor, vimRef.current);
     }
 
     function onChange(value, event) {
@@ -163,7 +169,7 @@ export default function QueryEditor(props) {
                                     }
                                 />
                                 </div>
-                                <div id="vim" className="border-2 border-red-500"></div>
+                                <div ref={vimRef} id="vim" className="border-2 border-red-500"></div>
                             </div>
                             <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
                                 { 
