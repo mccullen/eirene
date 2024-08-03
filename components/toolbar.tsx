@@ -4,7 +4,7 @@ import { downloadDb } from "@/services/util";
 
 
 
-export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg }) {
+export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, successMsg, onViChecked }) {
     const { 
         getCurrentDatabase, 
         dbReady, 
@@ -18,6 +18,11 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
     const [disabled, setDisabled] = useState<boolean>(true);
 
     const names = getDatabaseNames();
+
+    function handleViChecked(event) {
+        setVi(event.target.checked);
+        onViChecked(event, event.target.checked);
+    }
 
     return (
       <div id="tool-bar" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex justify-between items-center">
@@ -50,10 +55,7 @@ export default function Toolbar({ onExecute, dialect, setDialect, errorMsg, succ
         {/* Right aligned */}
         <div className="flex space-x-4 items-center">
             <label title="vi > emacs">
-                <input id="vi-checkbox" type="checkbox" name="vi" checked={vi} onChange={event => {
-                    console.log(vi);
-                    debugger;
-                }} /><span className="ml-2">Vi</span>
+                <input id="vi-checkbox" type="checkbox" name="vi" checked={vi} onChange={handleViChecked} /><span className="ml-2">Vi</span>
             </label>
             <select
                 value={currentDatabaseName}

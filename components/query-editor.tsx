@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
-import { initVimMode } from 'monaco-vim';
+//import { initVimMode } from 'monaco-vim';
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './global-provider';
 import ResultTable from './result-table';
@@ -31,27 +31,46 @@ export default function QueryEditor(props) {
         setErrorMsg,
         successMsg,
         setSuccessMsg,
+        vi,
         splitSizesHorizontal,
         setSplitSizesHorizontal
     } = useContext(GlobalContext);
 
     let editorRef = useRef<any>(null);
+    const viRef = useRef<any>(null);
+    const viModeRef = useRef<any>(null);
     let monacoRef = useRef(null);
     let vimRef = useRef<any>(null);
     let exec = useRef<any>(false);
+
     useEffect(() => {
-        console.log("useEffect");
-        console.log(editorRef.current);
+        console.log("empty arr");
+        async function init() {
+            // Import uses client stuff, so you need to import in lifecycle method
+            viRef.current = await import("monaco-vim");
+        }
+        init();
     }, []);
+
+    function handleViChecked(event, checked) {
+        if (checked) {
+            viModeRef.current = viRef.current.initVimMode(editorRef.current, vimRef.current);
+            editorRef.current.updateOptions({ cursorStyle: "block" });
+            console.log(editorRef.current);
+        } else {
+            // dispose
+            editorRef.current.updateOptions({ cursorStyle: "line" });
+            viModeRef?.current?.dispose();
+        }
+    }
 
     function beforeMount(monaco) {
         monacoRef.current = monaco;
     }
 
     function onMount(editor, monaco) {
-        console.log("mounted");
         editorRef.current = editor;
-        //const vimMode = initVimMode(editor, vimRef.current);
+        handleViChecked(null, vi);
     }
 
     function onChange(value, event) {
@@ -148,6 +167,7 @@ export default function QueryEditor(props) {
                                     setDialect={setDialect} 
                                     errorMsg={errorMsg}
                                     successMsg={successMsg}
+                                    onViChecked={handleViChecked}
                                 />
                                 <div id="editor-wrapper" className="flex-1 relative">
                                 <Editor
@@ -164,7 +184,7 @@ export default function QueryEditor(props) {
                                         {
                                             minimap: {enabled: false},
                                             acceptSuggestionOnEnter: "off",
-                                            //cursorStyle: "block"
+                                            cursorStyle: vi ? "block" : "line"
                                         }
                                     }
                                 />

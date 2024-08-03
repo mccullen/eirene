@@ -32,7 +32,7 @@ function GlobalProvider({children}) {
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [successMsg, setSuccessMsg] = useState<string>("");
     const [activeTab, setActiveTab] = useState(0);
-    const [vi, setVi] = useState(true);
+    const [vi, setVi] = useState(false);
     const [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
     const [splitSizesHorizontal, setSplitSizesHorizontal] = useState<number[]>([20, 80]);
     const monacoRef = useRef<Monaco|null>(null);
