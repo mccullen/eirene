@@ -172,7 +172,7 @@ export default function QueryEditor(props) {
                                 />
                                 <div id="editor-wrapper" className="flex-1 relative">
                                 <Editor
-                                    className="border-2 border-blue-500 absolute inset-0"
+                                    className="absolute inset-0"
                                     height="100%"
                                     width="100%"
                                     theme="light"
@@ -190,7 +190,7 @@ export default function QueryEditor(props) {
                                     }
                                 />
                                 </div>
-                                <div ref={vimRef} id="vim" className="border-2 border-red-500"></div>
+                                <div ref={vimRef} id="vim" className={`${vi ? 'block' : 'hidden'}`}></div>
                             </div>
                             <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
                                 { 
