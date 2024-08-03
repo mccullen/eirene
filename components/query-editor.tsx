@@ -74,6 +74,7 @@ export default function QueryEditor(props) {
     }
 
     function onChange(value, event) {
+        setDefaultValue(value);
     }
     
 
