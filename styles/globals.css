@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --height-screen-minus-header: calc(100vh - 80px);
+}
+
 /* split js */
 .gutter {
     background-color: #eee;
@@ -23,10 +27,12 @@
 
 .split-vertical {
     /* Fill screen, minus the height of the header */
-    height: calc(100vh - 80px);
+    height: var(--height-screen-minus-header);
 }
 
 .split-horizontal {
+    /* Fill screen, minus the height of the header */
+    height: var(--height-screen-minus-header);
     display: flex;
     flex-direction: row;
 }

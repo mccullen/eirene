@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
+//import { initVimMode } from 'monaco-vim';
 import { Editor } from '@monaco-editor/react';
 import { GlobalContext } from './global-provider';
 import ResultTable from './result-table';
@@ -10,6 +11,7 @@ import { translate, TranslateBody } from "@/services/web-api";
 import { getHighlightedText, getColsAndRows, round } from "@/services/util";
 import ObjectExplorer from "./object-explorer";
 import Tabs from "./tabs";
+import * as monaco from 'monaco-editor';
 
 export default function QueryEditor(props) {
     const { 
@@ -30,32 +32,52 @@ export default function QueryEditor(props) {
         setErrorMsg,
         successMsg,
         setSuccessMsg,
+        vi,
         splitSizesHorizontal,
         setSplitSizesHorizontal
     } = useContext(GlobalContext);
 
-    let editorRef = useRef<any>(null);
+    let editorRef = useRef<monaco.editor.IStandaloneCodeEditor|null>(null);
+    const viRef = useRef<any>(null);
+    const viModeRef = useRef<any>(null);
     let monacoRef = useRef(null);
-    let exec = useRef<any>(false);
+    let vimRef = useRef<any>(null);
+
+    useEffect(() => {
+        async function init() {
+            // Import uses client stuff, so you need to import in lifecycle method
+            viRef.current = await import("monaco-vim");
+        }
+        init();
+    }, []);
+
+    function handleViChecked(event, checked) {
+        if (checked) {
+            viModeRef.current = viRef.current.initVimMode(editorRef.current, vimRef.current);
+            editorRef.current?.updateOptions({ cursorStyle: "block" });
+            console.log(editorRef.current);
+        } else {
+            // dispose
+            editorRef.current?.updateOptions({ cursorStyle: "line" });
+            viModeRef?.current?.dispose();
+        }
+    }
 
     function beforeMount(monaco) {
         monacoRef.current = monaco;
     }
 
-    function onMount(editor, monaco) {
+    function onMount(editor: monaco.editor.IStandaloneCodeEditor, monaco) {
         editorRef.current = editor;
+        handleViChecked(null, vi);
 
-        // Default makes pressing enter do autocomplete, which is really annoying IMO
-        editor.onKeyDown((e) => {
-          if (e.keyCode === monaco.KeyCode.Enter) {
-            e.preventDefault(); // Prevent autocomplete acceptance
-            
-            // Insert a new line at the current cursor position
-            editor.executeEdits('', [{
-              range: editor.getSelection(),
-              text: '\n'
-            }]);
-          }
+        editor.addAction({
+            id: "execute",
+            label: "Execute",
+            keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+            run: () => {
+                onExecute();
+            }
         });
     }
 
@@ -64,8 +86,7 @@ export default function QueryEditor(props) {
     }
     
 
-    async function onExecute(event) {
-        exec.current = true;
+    async function onExecute(event?: Event) {
         // Hide results while executing. Will show if no error occurs
         setResultVis(false);
         sendGTMEvent({"event": "onExecute", value: "abc", junk: "world"});
@@ -79,7 +100,7 @@ export default function QueryEditor(props) {
             query = highlightedText;
         } else {
             // Gets the full text
-            query = editorRef.current.getValue();
+            query = editorRef.current?.getValue() || "";
         }
 
         if (dialect === "ohdsisql") {
@@ -125,75 +146,86 @@ export default function QueryEditor(props) {
         }
     }
 
-  return (
-    <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
-
-      <div id="split-wrapper">
-        <Split
-            className="split-horizontal"
-            minSize={0}
-            onDragEnd={(sizes) => {
-              setSplitSizesHorizontal(sizes);
-            }}
-            sizes={splitSizesHorizontal}
-        >
-          <ObjectExplorer />
-          <div id="right-side-split">
-            <Split
-                className="split-vertical"
-                direction="vertical"
-                minSize={0}
-                onDragEnd={(sizes) => {
-                    setSplitSizes(sizes);
-                }}
-                sizes={splitSizes} 
-            >
-              <div id="top-pane">
-                <Toolbar 
-                    onExecute={onExecute} 
-                    dialect={dialect} 
-                    setDialect={setDialect} 
-                    errorMsg={errorMsg}
-                    successMsg={successMsg}
-                />
-                <Editor 
-                    height="100%"
-                    width="100%"
-                    theme="light"
-                    defaultLanguage='sql'
-                    defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
-                    onChange={onChange}
-                    onMount={onMount}
-                    beforeMount={beforeMount}
-                />
-              </div>
-              <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
-                { 
-                  resultVis && (
-                    <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
-                        setActiveTab(i);
-                    }} />
-                  )
-                }
-                { 
-                  resultVis && rowsAndCols.map((rc, i) => {
-                    const {rows, cols} = rc;
-                    return (
-                      <ResultTable 
-                        id={`result-table-${i}`}
-                        key={i}
-                        className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
-                        columns={cols} 
-                        data={rows} 
-                      />
-                    )
-                  })
-                }
-              </div>
-            </Split>
-          </div>
-        </Split>
-      </div>
-    </div>
-  );
+    return (
+        <div id="query-editor-wrapper" className="mt-2 border border-gray-300 rounded-lg shadow-md bg-white">
+            <div id="split-wrapper">
+                <Split
+                    className="split-horizontal"
+                    minSize={0}
+                    onDragEnd={(sizes) => {
+                        setSplitSizesHorizontal(sizes);
+                    }}
+                    sizes={splitSizesHorizontal}
+                >
+                    <ObjectExplorer />
+                    <div id="right-side-split">
+                        <Split
+                            className="split-vertical"
+                            direction="vertical"
+                            minSize={0}
+                            onDragEnd={(sizes) => {
+                                setSplitSizes(sizes);
+                            }}
+                            sizes={splitSizes} 
+                        >
+                            <div id="top-pane" className="flex flex-col h-full">
+                                <Toolbar 
+                                    onExecute={onExecute} 
+                                    dialect={dialect} 
+                                    setDialect={setDialect} 
+                                    errorMsg={errorMsg}
+                                    successMsg={successMsg}
+                                    onViChecked={handleViChecked}
+                                />
+                                <div id="editor-wrapper" className="flex-1 relative">
+                                <Editor
+                                    className="absolute inset-0"
+                                    height="100%"
+                                    width="100%"
+                                    theme="light"
+                                    defaultLanguage='sql'
+                                    defaultValue={defaultValue || "SELECT * FROM person LIMIT 100;"}
+                                    onChange={onChange}
+                                    onMount={onMount}
+                                    beforeMount={beforeMount}
+                                    options={
+                                        {
+                                            minimap: {enabled: false},
+                                            acceptSuggestionOnEnter: "off",
+                                            cursorStyle: vi ? "block" : "line"
+                                        }
+                                    }
+                                />
+                                </div>
+                                <div ref={vimRef} id="vim" className={`${vi ? 'block' : 'hidden'}`}></div>
+                            </div>
+                            <div id="bottom-pane" className="overflow-x-auto overflow-y-auto relative z-10">
+                                { 
+                                    resultVis && (
+                                        <Tabs n={rowsAndCols.length} activeTab={activeTab} onClick={(event, i) => {
+                                            setActiveTab(i);
+                                        }} />
+                                    )
+                                    }
+                                { 
+                                    resultVis && rowsAndCols.map((rc, i) => {
+                                        const {rows, cols} = rc;
+                                        return (
+                                            <ResultTable 
+                                                id={`result-table-${i}`}
+                                                key={i}
+                                                className={`result-tbl ${activeTab === i ? 'block' : 'hidden'}`} 
+                                                columns={cols} 
+                                                data={rows} 
+                                            />
+                                        )
+                                    })
+                                }
+                            </div>
+                        </Split>
+                    </div>
+                </Split>
+            </div>
+        </div>
+    );
 }

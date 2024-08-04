@@ -1,5 +1,5 @@
 "use client"
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useRef } from "react";
 import initSqlJs from "sql.js";
 import { getColumns, getTableObjs, getTables } from "@/services/db";
 import { Monaco, loader } from "@monaco-editor/react";
@@ -32,15 +32,15 @@ function GlobalProvider({children}) {
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [successMsg, setSuccessMsg] = useState<string>("");
     const [activeTab, setActiveTab] = useState(0);
+    const [vi, setVi] = useState(false);
     const [splitSizes, setSplitSizes] = useState<number[]>([50, 50]);
     const [splitSizesHorizontal, setSplitSizesHorizontal] = useState<number[]>([20, 80]);
-    const [monaco, setMonaco] = useState<Monaco|null>(null);
+    const monacoRef = useRef<Monaco|null>(null);
     const [autocompleteDispose, setAutoCompleteDispose] = useState<any>(null);
 
     useEffect(() => {
         const init = async () => {
-            const newMonaco = await loader.init();
-            setMonaco(newMonaco);
+            monacoRef.current = await loader.init();
         };
         // Get the monaco editor instance, mainly for registering autocomplete
         init();
@@ -49,19 +49,19 @@ function GlobalProvider({children}) {
     useEffect(() => {
         // When the current database changes, we need to re-register autocomplete per the tables/cols in
         // the current database
-        if (monaco && databases[currentDatabaseName]?.tables) {
-            // Monaco initialized and current database present
+        if (monacoRef.current && databases[currentDatabaseName]?.tables) {
+            // monacoRef.current initialized and current database present
 
             // Dispose old autocomplete from previous connection
             autocompleteDispose?.dispose();
 
             // Register new autocomplete based on new database tables/columns
-            const newAutoCompleteDispose = registerAutocomplete(monaco, databases?.[currentDatabaseName]?.tables);
+            const newAutoCompleteDispose = registerAutocomplete(monacoRef.current, databases?.[currentDatabaseName]?.tables);
 
             // Persist the dispose so you can dispose the autocomplete when you load another DB
             setAutoCompleteDispose(newAutoCompleteDispose);
         }
-    }, [monaco, currentDatabaseName]);
+    }, [currentDatabaseName]);
 
     const connectDatabase = async (name, sqliteBuffer) => {
         name = getUniqueKey(name, databases);
@@ -139,6 +139,8 @@ function GlobalProvider({children}) {
         splitSizesHorizontal,
         setSplitSizesHorizontal,
         removeDatabase,
+        vi,
+        setVi
     };
 
 

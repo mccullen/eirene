@@ -25,13 +25,16 @@ export default function ObjectExplorer() {
         }
     }
     return (
-        <div id="obj-explorer" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex flex-col">
-            <FileButton
-                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-                onClick={onNewConnectionClick}
-             >
-                New Connection
-            </FileButton>
+        <div id="obj-explorer" className="border-b border-gray-200 bg-gray-50 pl-2 pt-2 flex flex-col">
+            <div className="border-b border-gray-200 bg-gray-50 pb-2">
+                <FileButton
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={onNewConnectionClick}
+                >
+                    New Connection
+                </FileButton>
+            </div>
+            <div className="overflow-auto">
             {Object.keys(databases).map(dbName => {
                 // Get all the info for this database
                 let dbObj = databases[dbName];
@@ -93,6 +96,7 @@ export default function ObjectExplorer() {
                     <Collapsible key={dbName} items={items} />
                 );
             })}
+            </div>
         </div>
     );
 }
