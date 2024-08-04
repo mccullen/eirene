@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, createContext, useState, useRef, useContext } from 'react';
 import Link from 'next/link';
-import initSqlJs from "sql.js";
 import JSZip from 'jszip';
 import { usePathname } from 'next/navigation';
 import { GlobalContext } from "./global-provider";
@@ -24,7 +23,6 @@ export default function Shell({ children }: any) {
     const { connectDatabase } = useContext(GlobalContext);
     const pathname = usePathname();
     let mobileMenu = useRef<any>(null);
-    let [db, setDb] = useState<any>();
 
     // Put the DB into a global context so it persists across pages in the layout
     useEffect(() => {
@@ -100,7 +98,7 @@ export default function Shell({ children }: any) {
             <div ref={mobileMenu} className="mobile-menu hidden">
               <Link id="home-mobile-link" href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
               <Link id="playground-mobile-link" href="/playground" className="block py-2 px-4 text-sm hover:bg-gray-200">Playground</Link>
-              <Link href="tutorial" className="block py-2 px-4 text-sm hover:bg-gray-200">Tutorial</Link>
+              {/*<Link href="tutorial" className="block py-2 px-4 text-sm hover:bg-gray-200">Tutorial</Link>*/}
             </div>
           </nav>
 
