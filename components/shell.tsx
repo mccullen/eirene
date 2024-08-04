@@ -60,7 +60,11 @@ export default function Shell({ children }: any) {
                   </div>
 
                   {/* primary nav */}
+                  {/*
+                  For mobile, this hides by default, but overrides to display of flex if md screen or above
                   <div className="hidden md:flex items-center space-x-1">
+                  */}
+                  <div className="flex items-center space-x-1">
                     {
                       navItems.map(({id, name, path}) => {
                         const isActive = pathname === path;
@@ -81,6 +85,7 @@ export default function Shell({ children }: any) {
                 </div>
 
                 {/* mobile button */}
+                {/*
                 <div className="md:hidden flex items-center py-5 px-3">
                   <button className="mobile-menu-button" onClick={ event => {
                     mobileMenu.current.classList.toggle("hidden");
@@ -90,16 +95,18 @@ export default function Shell({ children }: any) {
                     </svg>
                   </button>
                 </div>
-              </div>
+              */}
 
+              </div>
             </div>
 
             {/* mobile menu */}
+            {/*
             <div ref={mobileMenu} className="mobile-menu hidden">
               <Link id="home-mobile-link" href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">Home</Link>
               <Link id="playground-mobile-link" href="/playground" className="block py-2 px-4 text-sm hover:bg-gray-200">Playground</Link>
-              {/*<Link href="tutorial" className="block py-2 px-4 text-sm hover:bg-gray-200">Tutorial</Link>*/}
             </div>
+            */}
           </nav>
 
           {/* content goes here */}

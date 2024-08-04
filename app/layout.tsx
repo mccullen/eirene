@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GoogleTagManager gtmId="GTM-WF4C59B7" />
-      <body>
+      <body className="min-w-[75rem]">
         <GlobalProvider>
           <Shell>
             {children}
