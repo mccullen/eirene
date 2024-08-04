@@ -44,7 +44,6 @@ export default function QueryEditor(props) {
     let exec = useRef<any>(false);
 
     useEffect(() => {
-        console.log("empty arr");
         async function init() {
             // Import uses client stuff, so you need to import in lifecycle method
             viRef.current = await import("monaco-vim");

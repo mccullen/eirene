@@ -25,7 +25,7 @@ export default function ObjectExplorer() {
         }
     }
     return (
-        <div id="obj-explorer" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex flex-col">
+        <div id="obj-explorer" className="pb-2 border-b border-gray-200 bg-gray-50 p-2 flex flex-col overflow-auto">
             <FileButton
                 className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                 onClick={onNewConnectionClick}
