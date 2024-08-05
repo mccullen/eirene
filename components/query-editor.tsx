@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState, useMemo, useContext } from 'react';
-//import { initVimMode } from 'monaco-vim';
 import { Editor } from '@monaco-editor/react';
+//import dynamic from 'next/dynamic';
+//const Editor = dynamic(() => import("@monaco-editor/react").then(mod => ({ default: mod.Editor})), {ssr: false});
 import { GlobalContext } from './global-provider';
 import ResultTable from './result-table';
 import { sendGTMEvent } from '@next/third-parties/google'
@@ -16,6 +17,7 @@ import * as monaco from 'monaco-editor';
 export default function QueryEditor(props) {
     const { 
         getCurrentDatabase, 
+        currentDatabaseName,
         defaultValue, 
         setDefaultValue, 
         rowsAndCols, 
@@ -51,6 +53,19 @@ export default function QueryEditor(props) {
         init();
     }, []);
 
+
+    useEffect(() => {
+        // Need to add alt execution option using ctrl-enter here.
+        // monaco doesn't like it when you put this in onMount
+        addExecuteOption();
+    }, [currentDatabaseName]);
+
+    function addExecuteOption() {
+        editorRef?.current?.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function(editor, a, b, c) {
+            onExecute();
+        });
+    }
+
     function handleViChecked(event, checked) {
         if (checked) {
             viModeRef.current = viRef.current.initVimMode(editorRef.current, vimRef.current);
@@ -70,15 +85,7 @@ export default function QueryEditor(props) {
     function onMount(editor: monaco.editor.IStandaloneCodeEditor, monaco) {
         editorRef.current = editor;
         handleViChecked(null, vi);
-
-        editor.addAction({
-            id: "execute",
-            label: "Execute",
-            keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
-            run: () => {
-                onExecute();
-            }
-        });
+        //addExecuteOption();
     }
 
     function onChange(value, event) {
@@ -192,6 +199,7 @@ export default function QueryEditor(props) {
                                         {
                                             minimap: {enabled: false},
                                             acceptSuggestionOnEnter: "off",
+                                            contextmenu: false,
                                             cursorStyle: vi ? "block" : "line"
                                         }
                                     }
