@@ -11,9 +11,17 @@ This is running the dev script in package.json. Notice that the ENV=dev is set h
 This is so that the basePath gets gets set to "/" in your local environment.
 On gitlab, the basePath needs to be the project name because the gitlab page
 url will be under the project name as its root rather than "/". See the logic in next.config.js
+
+To use backend functions
+```bash
+netlify dev
+```
+
+If you don't need backend functions, you can do
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 The page should auto-update as you edit files
