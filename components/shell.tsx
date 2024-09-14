@@ -4,6 +4,7 @@ import Link from 'next/link';
 import JSZip from 'jszip';
 import { usePathname } from 'next/navigation';
 import { GlobalContext } from "./global-provider";
+import clsx from "clsx";
 
 const navItems = [
   {
@@ -73,7 +74,10 @@ export default function Shell({ children }: any) {
                             key={path}
                             id={id}
                             href={path}
-                            className={`py-5 px-3 hover:text-blue-600 transition duration-300  ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`}
+                            className={clsx(`py-5 px-3 hover:text-green-600 transition duration-300`, {
+                              'text-blue-600 font-bold': isActive,
+                              'text-gray-700': !isActive
+                            })}
                           >
                             {name}
                           </Link>
